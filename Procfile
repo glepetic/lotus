@@ -1,1 +1,1 @@
-worker: target/universal/stage/bin/Bot
+worker: sbt run .src/main/scala/Bot
