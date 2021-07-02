@@ -2,6 +2,6 @@
 *.log
 
 .bsp
-project
+project/target
 target
 .idea
