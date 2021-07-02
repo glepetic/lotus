@@ -1,1 +1,1 @@
-worker: sbt run .src/main/scala/Bot
+worker: target/universal/stage/bin/lotus
