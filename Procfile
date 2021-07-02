@@ -1,1 +1,1 @@
-bot: target/universal/stage/bin/Bot
+worker: target/universal/stage/bin/Bot
