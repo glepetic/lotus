@@ -2,8 +2,9 @@ package org.maple
 package services
 
 import clients.StoryMapleWebsiteClient
-import model.Player
 import parsers.StoryMapleRankingsParser
+
+import org.maple.model.maplestory.Player
 
 class RankingsService {
 

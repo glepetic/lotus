@@ -1,7 +1,7 @@
 package org.maple
-package model
+package model.maplestory
 
-import Jobs.MapleJob
+import model.maplestory.Jobs.MapleJob
 
 //TODO: guild: MapleGuild
 case class MapleCharacter(ign: String, level: Int, job: MapleJob, guild: String) {
