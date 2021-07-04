@@ -21,7 +21,7 @@ class GuildCharacters extends MyCommand {
     val characters = rankingsService.getGuildCharacters(parsedGuildName)
 
     val content = characters match {
-      case Nil => s"No members found for guild: ${parsedGuildName}!"
+      case Nil => s"No members found for guild: ${Markdown.bold(parsedGuildName)}!"
       case gc => s"Found ${Markdown.bold(gc.length.toString)} characters for guild ${Markdown.bold(parsedGuildName)}: ${Markdown.codeSnippet(gc.map(c => c.ign).joinWords)}"
     }
 
