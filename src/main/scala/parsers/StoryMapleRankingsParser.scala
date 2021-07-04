@@ -1,9 +1,9 @@
 package org.maple
 package parsers
 
-import model.Player
 
-import org.maple.model.maplestory.{Jobs, MapleCharacter, Player}
+import model.maplestory.{Jobs, MapleCharacter, Player}
+
 import spray.json.{JsArray, JsNumber, JsString, JsValue}
 
 class StoryMapleRankingsParser {
