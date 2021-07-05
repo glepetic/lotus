@@ -8,7 +8,7 @@ import ackcord.requests.Request
 import ackcord.syntax.TextChannelSyntax
 
 class Hello extends MyCommand {
-  override def name(): String = "hello"
+  override def aliases: Seq[String] = Seq("hello")
 
   override def execute(msg: UserCommandMessage[_], arguments: List[String]): Request[_] =
     msg.textChannel.sendMessage(s"Hello ${msg.user.username}")

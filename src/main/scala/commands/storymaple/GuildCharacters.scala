@@ -12,7 +12,7 @@ import ackcord.commands.UserCommandMessage
 import ackcord.requests.{CreateMessage, CreateMessageData, DeleteMessage, Request}
 
 class GuildCharacters extends MyCommand {
-  override def name(): String = "guild"
+  override def aliases: Seq[String] = Seq("g","guild")
 
   override def execute(msg: UserCommandMessage[_], arguments: List[String]): Request[_] = {
     val rankingsService = new RankingsService()

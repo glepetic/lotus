@@ -9,7 +9,7 @@ import ackcord.requests.Request
 import ackcord.syntax.TextChannelSyntax
 
 class Meme extends MyCommand {
-  override def name(): String = "meme"
+  override def aliases: Seq[String] = Seq("meme")
   override def execute(msg: UserCommandMessage[_], arguments: List[String]): Request[_] = MemeRepository.getInstance
     .getMaplestoryMeme
     .map(meme => msg.textChannel.sendMessage(meme))

@@ -12,7 +12,7 @@ import ackcord.requests.Request
 import ackcord.syntax.TextChannelSyntax
 
 class Timezones extends MyCommand {
-  override def name(): String = "timezones"
+  override def aliases: Seq[String] = Seq("timezones")
 
   override def execute(msg: UserCommandMessage[_], arguments: List[String]): Request[_] = {
     val parsedArgs = arguments.join

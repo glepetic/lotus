@@ -38,7 +38,7 @@ class CommandListener(requests: Requests) extends CommandController(requests) {
 
   private def toNamedCommand(command: MyCommand): NamedCommand[_] = {
     Command
-      .named(Seq(BotEnvironment.prefix), Seq(command.name()))
+      .named(Seq(BotEnvironment.prefix), command.aliases)
       .parsing(MessageParser[RemainingAsString])
       .withRequest(m => {
         this.logCommandCall(m)

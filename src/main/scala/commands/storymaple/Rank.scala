@@ -12,7 +12,7 @@ import ackcord.requests.{CreateMessage, CreateMessageData, DeleteMessage, Reques
 import org.maple.config.BotEnvironment
 
 class Rank extends MyCommand {
-  override def name(): String = "rank"
+  override def aliases: Seq[String] = Seq("r","rank")
 
   override def execute(msg: UserCommandMessage[_], arguments: List[String]): Request[_] = {
     val rankingsService = new RankingsService()

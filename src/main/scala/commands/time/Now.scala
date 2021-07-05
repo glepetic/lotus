@@ -12,7 +12,7 @@ import ackcord.requests.Request
 import ackcord.syntax.TextChannelSyntax
 
 class Now extends MyCommand {
-  override def name(): String = "now"
+  override def aliases: Seq[String] = Seq("now")
 
   override def execute(msg: UserCommandMessage[_], arguments: List[String]): Request[_] = {
     val timezonesService = new TimezonesService

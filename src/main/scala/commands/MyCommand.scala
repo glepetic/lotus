@@ -5,6 +5,6 @@ import ackcord.commands.UserCommandMessage
 import ackcord.requests.Request
 
 trait MyCommand {
-    def name(): String
+    def aliases: Seq[String]
     def execute(msg: UserCommandMessage[_], arguments: List[String]) : Request[_]
 }

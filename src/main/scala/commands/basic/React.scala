@@ -7,7 +7,7 @@ import ackcord.commands.UserCommandMessage
 import ackcord.requests.{CreateReaction, Request}
 
 class React extends MyCommand{
-  override def name(): String = "react"
+  override def aliases: Seq[String] = Seq("react")
 
   override def execute(msg: UserCommandMessage[_], arguments: List[String]): Request[_] =
     CreateReaction(msg.textChannel.id, msg.message.id, "\uD83C\uDF08")

@@ -10,7 +10,7 @@ import ackcord.requests.Request
 import ackcord.syntax.TextChannelSyntax
 
 class Convert extends MyCommand {
-  override def name(): String = "convert"
+  override def aliases: Seq[String] = Seq("convert")
   override def execute(msg: UserCommandMessage[_], arguments: List[String]): Request[_] = {
       val content = arguments match {
         case List(originUnit, targetUnit, value) => ""
