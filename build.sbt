@@ -11,4 +11,10 @@ libraryDependencies += "net.katsstuff" %% "ackcord" % "0.17.1"
 libraryDependencies +=  "org.scalaj" %% "scalaj-http" % "2.4.2"
 libraryDependencies += "io.spray" %%  "spray-json" % "1.3.6"
 
+libraryDependencies ++= Seq(
+  "org.slf4j" % "slf4j-api" % "1.7.25",
+  "ch.qos.logback" % "logback-classic" % "1.2.3"
+)
+excludeDependencies += "org.apache.logging.log4j" % "log4j-slf4j-impl"
+
 enablePlugins(JavaAppPackaging)

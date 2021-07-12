@@ -27,7 +27,7 @@ class EmbedBuilder(private val title: Option[String],
   def defaultColor: EmbedBuilder = this.color("yellow")
   def defaultErrorColor: EmbedBuilder = this.color("red")
   def color(col: String): EmbedBuilder = new EmbedBuilder(title, description, url, timestamp, Option(col).map(c => Colors.get(c)), footer, image, video, thumbnail, author, fields)
-  def ownerFooter: EmbedBuilder = this.footer("Made by " + BotEnvironment.botOwnerUsername, BotEnvironment.botOwnerAvatar)
+  def defaultFooter: EmbedBuilder = this.footer(s"Please report bugs or make suggestions to ${BotEnvironment.botOwnerUsername}", None)
   def footer(text: String, icon: Option[String]): EmbedBuilder = new EmbedBuilder(title, description, url, timestamp, color, Option(OutgoingEmbedFooter(text,icon)), image, video, thumbnail, author, fields)
   def defaultImage: EmbedBuilder = this.image(BotEnvironment.publicPath + "/mushroom.png")
   def image(i: String): EmbedBuilder = new EmbedBuilder(title, description, url, timestamp, color, footer, Option(OutgoingEmbedImage(i)), video, thumbnail, author, fields)

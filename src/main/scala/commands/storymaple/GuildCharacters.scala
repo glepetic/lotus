@@ -23,7 +23,7 @@ class GuildCharacters extends MyCommand {
     val embedBuilder = EmbedBuilder
       .builder
       .authorRequestedBy(msg.user)
-      .ownerFooter
+      .defaultFooter
 
     val embed = guild.map(g => embedBuilder
       .defaultColor

@@ -23,7 +23,7 @@ class Rank extends MyCommand {
     val embedBuilder = EmbedBuilder
       .builder
       .authorRequestedBy(msg.user)
-      .ownerFooter
+      .defaultFooter
 
     val embed = player.map(p => embedBuilder
       .defaultColor
