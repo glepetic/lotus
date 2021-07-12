@@ -17,7 +17,7 @@ class GuildCharacters extends MyCommand {
   override def execute(msg: UserCommandMessage[_], arguments: List[String]): Request[_] = {
     val rankingsService = new RankingsService()
 
-    val parsedGuildName = arguments.join.trim.toUpperCase
+    val parsedGuildName = arguments.join.trim
     val guild = rankingsService.getGuildCharacters(parsedGuildName)
 
     val embedBuilder = EmbedBuilder
