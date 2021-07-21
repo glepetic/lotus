@@ -34,7 +34,7 @@ class Rank extends MyCommand {
       .withField("Link Levels", p.linkLevels.toString)
       .withField("Nirvana", p.nirvana.toString)
       .build
-    ).getOrElse(embedBuilder.defaultErrorColor.defaultErrorThumbnail.title("Player Information: Error").description(s"Could not retrieve data for ${Markdown.bold(parsedIgn)}").build)
+    ).getOrElse(embedBuilder.defaultErrorColor.defaultErrorThumbnail.title("Player Information Error").description(s"Could not retrieve data for ${Markdown.bold(parsedIgn)}").build)
 
     BotEnvironment.client.foreach(client => client.requestsHelper.run(DeleteMessage(msg.textChannel.id, msg.message.id))(msg.cache))
     CreateMessage(msg.textChannel.id, CreateMessageData(embed = Option(embed)))

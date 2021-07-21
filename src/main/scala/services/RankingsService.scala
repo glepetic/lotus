@@ -3,7 +3,8 @@ package services
 
 import clients.StoryMapleWebsiteClient
 import model.maplestory.{MapleGuild, Player}
-import parsers.StoryMapleRankingsParser
+
+import org.maple.parsers.maplestory.StoryMapleRankingsParser
 
 class RankingsService {
 
@@ -15,7 +16,7 @@ class RankingsService {
   def getPlayer(ign: String): Option[Player] = this.getRankings.find(p => p.characters.map(c => c.ign.toLowerCase).contains(ign.toLowerCase))
   def getPlayer(rank: Int): Option[Player] = this.getRankings.find(p => p.rank == rank)
 
-  def getGuildCharacters(name: String): Option[MapleGuild] = Option(this.getRankings.flatMap(p => p.characters.filter(c => name equalsIgnoreCase c.guild)))
+  def getGuild(name: String): Option[MapleGuild] = Option(this.getRankings.flatMap(p => p.characters.filter(c => name equalsIgnoreCase c.guild)))
       .filter(chars => chars.nonEmpty)
       .map(chars => MapleGuild(name, chars))
 

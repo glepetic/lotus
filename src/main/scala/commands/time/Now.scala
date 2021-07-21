@@ -16,7 +16,7 @@ class Now extends MyCommand {
 
   override def execute(msg: UserCommandMessage[_], arguments: List[String]): Request[_] = {
     val timezonesService = new TimezonesService
-    val timesNow = arguments.map(arg => Markdown.bold(arg + ": ") + DateTimeUtils.asString(timezonesService.getTime(arg)))
+    val timesNow = arguments.map(arg => Markdown.bold(arg.toUpperCase + ": ") + DateTimeUtils.asString(timezonesService.getTime(arg)))
     val output = timesNow.joinLines
     msg.textChannel.sendMessage(output)
   }

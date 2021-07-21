@@ -1,6 +1,5 @@
 package org.maple
-package parsers
-
+package parsers.maplestory
 
 import model.maplestory.{Jobs, MapleCharacter, Player}
 
@@ -11,7 +10,7 @@ class StoryMapleRankingsParser {
   def parse(rankingsJson: JsValue): List[Player] = {
     val data = rankingsJson.asJsObject.getFields("data").head.asInstanceOf[JsArray].elements
     val characters = data.map(element => this.parse(element.asInstanceOf[JsArray]))
-    characters.foldLeft(Nil: List[Player])((accum, char) => this.accumulatePlayerCharacter(accum, char))
+    characters.foldLeft(Nil: List[Player])(this.accumulatePlayerCharacter)
   }
 
   private def parse(characterArray: JsArray): Player = {

@@ -9,6 +9,7 @@ object HttpClientConfig {
 
   val storymapleWebsiteHost: String = getStringProperty("storymaple.host").orThrow
   val rankingsUrl: String = getStringProperty("storymaple.rankings.search.url").orThrow
+  val dropsUrl: String = getStringProperty("storymaple.drops.search.url").orThrow
   val storyMapleTimeout: Int = getIntProperty("storymaple.timeout").orThrow
 
   val worldTimeApiHost: String = getStringProperty("worldtime.api.host").orThrow
