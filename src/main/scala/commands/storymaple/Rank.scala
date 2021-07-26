@@ -9,6 +9,7 @@ import utils.discord.Markdown
 
 import ackcord.commands.UserCommandMessage
 import ackcord.requests.{CreateMessage, CreateMessageData, DeleteMessage, Request}
+import org.maple.clients.MyDiscordClient
 import org.maple.config.BotEnvironment
 
 class Rank extends MyCommand {
@@ -36,7 +37,7 @@ class Rank extends MyCommand {
       .build
     ).getOrElse(embedBuilder.defaultErrorColor.defaultErrorThumbnail.title("Player Information Error").description(s"Could not retrieve data for ${Markdown.bold(parsedIgn)}").build)
 
-    BotEnvironment.client.foreach(client => client.requestsHelper.run(DeleteMessage(msg.textChannel.id, msg.message.id))(msg.cache))
+    MyDiscordClient.withCache(msg.cache).deleteMessage(msg.message)
     CreateMessage(msg.textChannel.id, CreateMessageData(embed = Option(embed)))
   }
 }

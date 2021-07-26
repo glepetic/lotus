@@ -4,7 +4,6 @@ package config
 import utils.OptionUtils._
 
 import ackcord.DiscordClient
-import ackcord.data.User
 import com.typesafe.config.{Config, ConfigFactory}
 
 import java.io.File
