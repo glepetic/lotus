@@ -29,10 +29,10 @@ class Rank extends MyCommand {
       .defaultColor
       .defaultThumbnail
       .title("Player Information")
-      .description(p.characters.map(c => s"${Markdown.bold(c.ign)} - Lvl. ${c.level} - ${Markdown.bold(c.job.name())}${Option(c.guild).map(g => " - " + g).getOrElse("")}").joinLines)
-      .withField("Rank", p.rank.toString)
-      .withField("Link Levels", p.linkLevels.toString)
-      .withField("Nirvana", p.nirvana.toString)
+      .description(p.characters.map(c => s"${Markdown.bold(c.ign)} - Lvl. ${c.level} - ${Markdown.bold(c.job.name)}${Option(c.guild).map(g => " - " + g).getOrElse("")}").joinLines)
+      .withField("Rank", p.rank.toString, inline = true)
+      .withField("Link Levels", p.linkLevels.toString, inline = true)
+      .withField("Nirvana", p.nirvana.toString, inline = true)
       .build
     ).getOrElse(embedBuilder.defaultErrorColor.defaultErrorThumbnail.title("Player Information Error").description(s"Could not retrieve data for ${Markdown.bold(parsedIgn)}").build)
 

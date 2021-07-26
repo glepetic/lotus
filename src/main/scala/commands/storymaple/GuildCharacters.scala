@@ -30,8 +30,8 @@ class GuildCharacters extends MyCommand {
       .defaultThumbnail
       .title(g.name.toUpperCase)
       .description(g.members.map(c => c.ign).joinWords)
-      .withField("Members", g.members.length.toString)
-      .withField("Total Levels", g.totalLevels.toString)
+      .withField("Members", g.members.length.toString, inline = true)
+      .withField("Total Levels", g.totalLevels.toString, inline = true)
       .build
     ).getOrElse(embedBuilder.defaultErrorColor.defaultErrorThumbnail.title("Guild Information Error").description(s"Could not retrieve data for ${Markdown.bold(parsedGuildName)}").build)
 

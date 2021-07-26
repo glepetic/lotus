@@ -40,7 +40,7 @@ class EmbedBuilder(private val title: Option[String],
   def author(name: String, u: Option[String], icon: Option[String]): EmbedBuilder = new EmbedBuilder(title, description, url, timestamp, color, footer, image, video, thumbnail, Option(OutgoingEmbedAuthor(name,u,icon)), fields)
   def fields(f: Seq[EmbedField]): EmbedBuilder = new EmbedBuilder(title, description, url, timestamp, color, footer, image, video, thumbnail, author, f)
   def withField(name: String, content: String): EmbedBuilder =  this.withField(name,content,inline = false)
-  def withField(name: String, content: String, inline: Boolean): EmbedBuilder = new EmbedBuilder(title, description, url, timestamp, color, footer, image, video, thumbnail, author, fields ++ Seq(EmbedField(name, content, Option(true))))
+  def withField(name: String, content: String, inline: Boolean): EmbedBuilder = new EmbedBuilder(title, description, url, timestamp, color, footer, image, video, thumbnail, author, fields ++ Seq(EmbedField(name, content, Option(inline))))
 
   def build: OutgoingEmbed = OutgoingEmbed(title, description, url, timestamp, color, footer, image, video, thumbnail, author, fields)
 
