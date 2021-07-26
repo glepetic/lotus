@@ -36,7 +36,6 @@ class BossRoster extends MyCommand {
       .build
     ).getOrElse(embedBuilder.defaultErrorColor.defaultErrorThumbnail.title("Boss Roster Error").description(s"Could not retrieve data for ${Markdown.bold(arguments.joinWords)}").build)
 
-    BotEnvironment.client.foreach(client => client.requestsHelper.run(DeleteMessage(msg.textChannel.id, msg.message.id))(msg.cache))
     CreateMessage(msg.textChannel.id, CreateMessageData(embed = Option(embed)))
   }
 }
