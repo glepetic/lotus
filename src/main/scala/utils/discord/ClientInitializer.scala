@@ -15,6 +15,7 @@ object ClientInitializer {
   private def addEventListener(client: DiscordClient) = {
     val myListeners = new EventListener(client.requests)
     client.registerListener(myListeners.onReady)
+    client.registerListener(myListeners.onReaction)
   }
 
   private def addCommandListener(client: DiscordClient): Unit = {

@@ -3,7 +3,7 @@ package listeners
 
 import commands.MyCommand
 import commands.basic.{Hello, Meme, Ping, React}
-import commands.storymaple.{BossRoster, GuildCharacters, Rank, WhatDropsFrom, WhoDrops}
+import commands.storymaple.{BossRoster, GuildCharacters, Host, Rank, WhatDropsFrom, WhoDrops}
 import commands.time.{Now, ServerTime, Timezones}
 import config.BotEnvironment
 import utils.DateTimeUtils
@@ -29,13 +29,14 @@ class CommandListener(requests: Requests) extends CommandController(requests) {
   private val whodrops: MyCommand = new WhoDrops
   private val whatdropsfrom: MyCommand = new WhatDropsFrom
   private val bossroster: MyCommand = new BossRoster
+  private val host: MyCommand = new Host
 
-  val enabledNamedCommands: List[NamedCommand[_]] = this.getEnabledNamedCommands;
+  val enabledNamedCommands: List[NamedCommand[_]] = this.getEnabledNamedCommands
 
   private def getEnabledNamedCommands: List[NamedCommand[_]] = {
     val basicEnabledCommands = List(ping, hello, meme)
     val timeEnabledCommands = List(now, timezones, servertime)
-    val storymapleEnabledCommands = List(rank, guild, whodrops, whatdropsfrom, bossroster)
+    val storymapleEnabledCommands = List(rank, guild, whodrops, whatdropsfrom, bossroster, host)
     val allEnabledCommands = basicEnabledCommands ++ timeEnabledCommands ++ storymapleEnabledCommands
     allEnabledCommands.map(c => this.toNamedCommand(c))
   }
