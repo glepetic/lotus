@@ -10,6 +10,8 @@ import ackcord.util.JsonOption
 import ackcord.{APIMessage, EventListenerMessage}
 import org.maple.config.BotEnvironment
 
+import scala.collection.immutable.ListSet
+
 object ReactionsHandler {
 
   def handle(reactionEvt: EventListenerMessage[APIMessage.MessageReactionAdd]): Unit = {
@@ -23,11 +25,11 @@ object ReactionsHandler {
     }
     val action = evt.emoji.id
       .filter(id => id.toString equals "871199809493671978")
-      .map(_ => (mentions: Set[String], usrMention: String) => mentions ++ Set(usrMention))
+      .map(_ => (mentions: ListSet[String], usrMention: String) => mentions ++ ListSet(usrMention))
       .orElse(evt.emoji.id
         .filter(id => id.toString equals "871199776572588112")
-        .map(_ => (mentions: Set[String], usrMention: String) => mentions.filterNot(_.equalsIgnoreCase(usrMention))))
-      .getOrElse((mentions: Set[String], _: String) => mentions)
+        .map(_ => (mentions: ListSet[String], usrMention: String) => mentions.filterNot(_.equalsIgnoreCase(usrMention))))
+      .getOrElse((mentions: ListSet[String], _: String) => mentions)
 
     val hostsRepository: HostsRepository = HostsRepository.getInstance
     val maybeBossRun: Option[BossRun] = hostsRepository.find(evt.messageId.toString)
