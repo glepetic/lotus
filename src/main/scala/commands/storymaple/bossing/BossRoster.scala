@@ -1,15 +1,14 @@
 package org.maple
-package commands.storymaple
+package commands.storymaple.bossing
 
 import builders.EmbedBuilder
 import commands.MyCommand
-import config.BotEnvironment
-import services.{BossRunsService, RankingsService}
+import services.BossRunsService
 import utils.IterableUtils._
 import utils.discord.Markdown
 
 import ackcord.commands.UserCommandMessage
-import ackcord.requests.{CreateMessage, CreateMessageData, DeleteMessage, Request}
+import ackcord.requests.{CreateMessage, CreateMessageData, Request}
 
 class BossRoster extends MyCommand {
   override def aliases: Seq[String] = Seq("br","bossroster")

@@ -1,14 +1,14 @@
 package org.maple
 package events.handlers
 
+import config.BotEnvironment
 import model.maplestory.BossRun
 import repositories.HostsRepository
 
 import ackcord.data.{MessageId, TextChannelId}
-import ackcord.requests.{DeleteUserReaction, EditMessage, EditMessageData, GetChannelMessage}
+import ackcord.requests.{DeleteAllReactions, DeleteUserReaction, EditMessage, EditMessageData}
 import ackcord.util.JsonOption
-import ackcord.{APIMessage, EventListenerMessage}
-import org.maple.config.BotEnvironment
+import ackcord.{APIMessage, DiscordClient, EventListenerMessage}
 
 import scala.collection.immutable.ListSet
 
@@ -23,27 +23,34 @@ object ReactionsHandler {
       case (None, Some(name)) => name
       case _ => ""
     }
-    val action = evt.emoji.id
+    val mapper = evt.emoji.id
       .filter(id => id.toString equals "871199809493671978")
-      .map(_ => (mentions: ListSet[String], usrMention: String) => mentions ++ ListSet(usrMention))
+      .map(_ => (br: BossRun, usrMention: String) => BossRun(br.messageId, br.timestamp, br.hostId, br.channelId, br.description, br.mentions ++ ListSet(usrMention)))
       .orElse(evt.emoji.id
         .filter(id => id.toString equals "871199776572588112")
-        .map(_ => (mentions: ListSet[String], usrMention: String) => mentions.filterNot(_.equalsIgnoreCase(usrMention))))
-      .getOrElse((mentions: ListSet[String], _: String) => mentions)
+        .map(_ => (br: BossRun, usrMention: String) => BossRun(br.messageId, br.timestamp, br.hostId, br.channelId, br.description, br.mentions.filterNot(_.equalsIgnoreCase(usrMention)))))
+      .orElse(evt.emoji.name
+        .filter(name => name equalsIgnoreCase "\uD83D\uDC4C")
+        .map(_ => (br: BossRun, _: String) => br.finalise)
+      )
+      .getOrElse((br: BossRun, _: String) => br)
 
     val hostsRepository: HostsRepository = HostsRepository.getInstance
-    val maybeBossRun: Option[BossRun] = hostsRepository.find(evt.messageId.toString)
+    val maybeBossRun: Option[BossRun] = hostsRepository
+      .find(evt.messageId.toString)
 
     maybeBossRun.foreach(br => {
-      val updatedBossRun = evt.user
-        .map(usr => BossRun(br.messageId, br.hostId, br.channelId, br.description, action(br.mentions, usr.mention)))
-      updatedBossRun.foreach(hostsRepository.update)
-      val bossRunAsString = updatedBossRun.map(_.asString)
+      val maybeUpdatedBossRun = evt.user.filter(_ => !br.finalised).map(usr => mapper(br, usr.mentionNick))
+      maybeUpdatedBossRun.foreach(hostsRepository.update)
+      val bossRunAsString = maybeUpdatedBossRun.map(_.asString)
       val channelId = TextChannelId(br.channelId)
       val messageId = MessageId(br.messageId)
-      BotEnvironment.client.foreach(client => client.requestsHelper.run(GetChannelMessage(channelId, messageId))(cache)
-        .foreach(_ => client.requestsHelper.run(EditMessage(channelId, messageId, EditMessageData(JsonOption.fromOptionWithNull(bossRunAsString))))(cache)
-          .foreach(_ => client.requestsHelper.run(DeleteUserReaction(channelId, messageId, emoji, evt.userId))(cache))(client.executionContext))(client.executionContext))
+      val request = maybeUpdatedBossRun
+        .filter(_.finalised)
+        .map(_ => DeleteAllReactions(channelId, messageId))
+        .getOrElse(DeleteUserReaction(channelId, messageId, emoji, evt.userId))
+      BotEnvironment.client.foreach(client => client.requestsHelper.run(EditMessage(channelId, messageId, EditMessageData(JsonOption.fromOptionWithNull(bossRunAsString))))(cache)
+        .foreach(_ => client.requestsHelper.run(request)(cache))(client.executionContext))
     })
 
   }
