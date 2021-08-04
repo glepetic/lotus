@@ -8,7 +8,7 @@ import repositories.HostsRepository
 import ackcord.data.{MessageId, TextChannelId}
 import ackcord.requests.{DeleteAllReactions, DeleteUserReaction, EditMessage, EditMessageData}
 import ackcord.util.JsonOption
-import ackcord.{APIMessage, DiscordClient, EventListenerMessage}
+import ackcord.{APIMessage, EventListenerMessage}
 
 import scala.collection.immutable.ListSet
 
@@ -31,7 +31,7 @@ object ReactionsHandler {
         .map(_ => (br: BossRun, usrMention: String) => BossRun(br.messageId, br.timestamp, br.hostId, br.channelId, br.description, br.mentions.filterNot(_.equalsIgnoreCase(usrMention)))))
       .orElse(evt.emoji.name
         .filter(name => name equalsIgnoreCase "\uD83D\uDC4C")
-        .map(_ => (br: BossRun, _: String) => br.finalise)
+        .map(_ => (br: BossRun, _: String) => evt.user.filter(usr => usr.id.toString equals br.hostId).map(_ => br.finalise).getOrElse(br))
       )
       .getOrElse((br: BossRun, _: String) => br)
 
