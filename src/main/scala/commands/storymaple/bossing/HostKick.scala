@@ -20,7 +20,7 @@ class HostKick extends MyCommand {
     val maybeBossRun: Option[BossRun] = hostsRepository
       .findLatest(host.id.toString, msg.textChannel.id.toString)
       .filter(br => !br.finalised)
-      .map(br => BossRun(br.messageId, br.timestamp, br.hostId, br.channelId, br.description, br.mentions.zipWithIndex.filterNot{case (_,index) => participantsToBeKicked contains index+1}.map(_._1), br.finalised))
+      .map(br => BossRun(br.messageId, br.timestamp, br.hostId, br.channelId, br.description, br.mentions.zipWithIndex.filterNot{case (_,index) => participantsToBeKicked contains index+1}.map(_._1)))
     maybeBossRun.foreach(br => {
       hostsRepository.update(br)
       BotEnvironment.client.foreach(client => client.requestsHelper.run(EditMessage(TextChannelId(br.channelId), MessageId(br.messageId), EditMessageData(JsonOption.fromOptionWithNull(maybeBossRun.map(_.asString)))))(msg.cache))

@@ -49,8 +49,10 @@ object ReactionsHandler {
         .filter(_.finalised)
         .map(_ => DeleteAllReactions(channelId, messageId))
         .getOrElse(DeleteUserReaction(channelId, messageId, emoji, evt.userId))
-      BotEnvironment.client.foreach(client => client.requestsHelper.run(EditMessage(channelId, messageId, EditMessageData(JsonOption.fromOptionWithNull(bossRunAsString))))(cache)
-        .foreach(_ => client.requestsHelper.run(request)(cache))(client.executionContext))
+      BotEnvironment.client.foreach(client => {
+        client.requestsHelper.run(EditMessage(channelId, messageId, EditMessageData(JsonOption.fromOptionWithNull(bossRunAsString))))(cache)
+        client.requestsHelper.run(request)(cache)
+      })
     })
 
   }

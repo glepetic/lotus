@@ -10,7 +10,9 @@ import java.time.Instant
 import scala.collection.immutable.ListSet
 
 case class BossRun(messageId: String, timestamp: Instant, hostId: String, channelId: String, description: String, mentions: ListSet[String] = ListSet.empty, finalised: Boolean = false) {
-  def asString: String = s"<@$hostId> is hosting ${Markdown.hightlight(description)} in channel <#$channelId>.\n\n$mentionsAsString\n$footerDescription"
+  def asString: String = s"<@$hostId> is hosting an event in channel <#$channelId>.\n\n$descriptionBody\n\n$mentionsAsString\n$footerDescription"
+
+  def descriptionBody: String = Markdown.bold("Description") + "\n" + description
 
   def mentionsAsString: String = Markdown.bold(s"Roster (${mentions.size})") + "\n" +
     Option(mentions.zipWithIndex)
@@ -30,7 +32,8 @@ case class BossRun(messageId: String, timestamp: Instant, hostId: String, channe
     Markdown.bold("Host Options") + "\n" +
     "- React with \uD83D\uDC4C to finalise the roster" + "\n" +
     s"- Use command ${Markdown.hightlight(BotEnvironment.prefix + "ha [names/mentions]")} to add other people to the roster. Example: ${Markdown.hightlight(BotEnvironment.prefix + "ha ahri @Gon @Franco alex")}" + "\n" +
-    s"- Use command ${Markdown.hightlight(BotEnvironment.prefix + "hk [numbers in roster]")} to remove people from the roster. Example: ${Markdown.hightlight(BotEnvironment.prefix + "hk 1 3")}" + "\n" + "\n" +
+    s"- Use command ${Markdown.hightlight(BotEnvironment.prefix + "hk [numbers in roster]")} to remove people from the roster. Example: ${Markdown.hightlight(BotEnvironment.prefix + "hk 1 3")}" + "\n" +
+    s"- Use command ${Markdown.hightlight(BotEnvironment.prefix + "hdm [new description]")} to modify the description of the event." + "\n" + "\n" +
     "--"
 
   def finalise: BossRun = BossRun(this.messageId, this.timestamp, this.hostId, this.channelId, this.description, this.mentions, finalised = true)
