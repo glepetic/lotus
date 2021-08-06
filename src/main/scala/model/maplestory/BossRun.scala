@@ -5,24 +5,11 @@ import config.BotEnvironment
 import utils.IterableUtils.IterableImprovements
 import utils.discord.Markdown
 
-import spray.json.{JsArray, JsBoolean, JsNumber, JsObject, JsString, JsValue}
-
 import java.time.Instant
 import java.util.UUID
 import scala.collection.immutable.ListSet
 
 case class BossRun(messageId: String, timestamp: Instant, hostId: String, channelId: String, description: String, id: String = UUID.randomUUID().toString, mentions: ListSet[String] = ListSet.empty, finalised: Boolean = false) {
-
-  def toJsValue: JsValue = JsObject(
-    "messageId" -> JsString(messageId),
-    "timestamp" -> JsNumber(timestamp.toEpochMilli),
-    "hostId" -> JsString(hostId),
-    "channelId" -> JsString(channelId),
-    "description" -> JsString(description),
-    "id" -> JsString(id),
-    "mentions" -> JsArray.apply(mentions.map(JsString.apply).toVector),
-    "finalised" -> JsBoolean(finalised)
-  )
 
   def asString: String = s"<@$hostId> is hosting an event in channel <#$channelId>.\n\n$descriptionBody\n\n$mentionsAsString\n$footerDescription"
 

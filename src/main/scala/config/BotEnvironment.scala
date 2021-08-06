@@ -20,8 +20,8 @@ object BotEnvironment {
 
   var client: Option[DiscordClient] = None
   val publicPath: String = this.resourcesPath + "/public"
-  val token: String = System.getenv("discord.bot.token")
-  val prefix: String = this.getStringProperty("bot.prefix").getOrElse("~")
+  val token: String = sys.env.get("discord.bot.token").orThrow
+  val prefix: String = sys.env.getOrElse("discord.bot.prefix", ".")
   val botOwnerUsername: String = this.getStringProperty("bot.owner.user").orThrow
 
 }
