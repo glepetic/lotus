@@ -22,7 +22,7 @@ class HostDescriptionModify extends MyCommand {
     val maybeBossRun: Option[BossRun] = hostsRepository
       .findLatest(host.id.toString, msg.textChannel.id.toString)
       .filter(br => !br.finalised)
-      .map(br => BossRun(br.messageId, br.timestamp, br.hostId, br.channelId, newDescription, br.mentions))
+      .map(br => BossRun(br.messageId, br.timestamp, br.hostId, br.channelId, newDescription, br.id, br.mentions))
     val maybeBossRunAsString: Option[String] = maybeBossRun.map(_.asString)
 
     maybeBossRun.foreach(br => {

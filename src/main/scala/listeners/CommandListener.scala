@@ -11,7 +11,7 @@ import utils.DateTimeUtils
 import ackcord.Requests
 import ackcord.commands.MessageParser.RemainingAsString
 import ackcord.commands._
-import org.maple.commands.storymaple.bossing.{BossRoster, Host, HostAdd, HostDescriptionModify, HostFinalise, HostKick}
+import org.maple.commands.storymaple.bossing.{BossRoster, Host, HostAdd, HostDescriptionModify, HostFinalise, HostKick, HostRepeat}
 
 class CommandListener(requests: Requests) extends CommandController(requests) {
 
@@ -35,13 +35,14 @@ class CommandListener(requests: Requests) extends CommandController(requests) {
   private val hostKick: MyCommand = new HostKick
   private val hostDescriptionModify: MyCommand = new HostDescriptionModify
   private val hostFinalise: MyCommand = new HostFinalise
+  private val hostRepeat: MyCommand = new HostRepeat
 
   val enabledNamedCommands: List[NamedCommand[_]] = this.getEnabledNamedCommands
 
   private def getEnabledNamedCommands: List[NamedCommand[_]] = {
     val basicEnabledCommands = List(ping, hello, meme)
     val timeEnabledCommands = List(now, timezones, servertime)
-    val storymapleEnabledCommands = List(rank, guild, whodrops, whatdropsfrom, bossroster, host, hostAdd, hostKick, hostDescriptionModify, hostFinalise)
+    val storymapleEnabledCommands = List(rank, guild, whodrops, whatdropsfrom, bossroster, host, hostAdd, hostKick, hostDescriptionModify, hostFinalise, hostRepeat)
     val allEnabledCommands = basicEnabledCommands ++ timeEnabledCommands ++ storymapleEnabledCommands
     allEnabledCommands.map(c => this.toNamedCommand(c))
   }

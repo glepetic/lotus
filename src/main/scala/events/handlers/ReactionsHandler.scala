@@ -25,10 +25,10 @@ object ReactionsHandler {
     }
     val mapper = evt.emoji.id
       .filter(id => id.toString equals "871199809493671978")
-      .map(_ => (br: BossRun, usrMention: String) => BossRun(br.messageId, br.timestamp, br.hostId, br.channelId, br.description, br.mentions ++ ListSet(usrMention)))
+      .map(_ => (br: BossRun, usrMention: String) => BossRun(br.messageId, br.timestamp, br.hostId, br.channelId, br.description, br.id, br.mentions ++ ListSet(usrMention)))
       .orElse(evt.emoji.id
         .filter(id => id.toString equals "871199776572588112")
-        .map(_ => (br: BossRun, usrMention: String) => BossRun(br.messageId, br.timestamp, br.hostId, br.channelId, br.description, br.mentions.filterNot(_.equalsIgnoreCase(usrMention)))))
+        .map(_ => (br: BossRun, usrMention: String) => BossRun(br.messageId, br.timestamp, br.hostId, br.channelId, br.description, br.id, br.mentions.filterNot(_.equalsIgnoreCase(usrMention)))))
       .orElse(evt.emoji.name
         .filter(name => name equalsIgnoreCase "\uD83D\uDC4C")
         .map(_ => (br: BossRun, _: String) => evt.user.filter(usr => usr.id.toString equals br.hostId).map(_ => br.finalise).getOrElse(br))

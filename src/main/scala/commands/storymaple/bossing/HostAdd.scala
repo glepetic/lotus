@@ -20,7 +20,7 @@ class HostAdd extends MyCommand {
     val maybeBossRun: Option[BossRun] = hostsRepository
       .findLatest(host.id.toString, msg.textChannel.id.toString)
       .filter(br => !br.finalised)
-      .map(br => BossRun(br.messageId, br.timestamp, br.hostId, br.channelId, br.description, br.mentions ++ participants))
+      .map(br => BossRun(br.messageId, br.timestamp, br.hostId, br.channelId, br.description, br.id, br.mentions ++ participants))
     maybeBossRun.foreach(br => {
       hostsRepository.update(br)
       BotEnvironment.client.foreach(client => client.requestsHelper.run(EditMessage(TextChannelId(br.channelId), MessageId(br.messageId), EditMessageData(JsonOption.fromOptionWithNull(maybeBossRun.map(_.asString)))))(msg.cache))

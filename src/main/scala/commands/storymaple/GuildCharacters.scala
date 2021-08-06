@@ -22,18 +22,18 @@ class GuildCharacters extends MyCommand {
 
     val embedBuilder = EmbedBuilder
       .builder
+      .title(msg.message.content)
       .authorRequestedBy(msg.user)
       .defaultFooter
 
     val embed = guild.map(g => embedBuilder
       .defaultColor
       .defaultThumbnail
-      .title(g.name.toUpperCase)
       .description(g.members.map(c => c.ign).joinWords)
       .withField("Members", g.members.length.toString, inline = true)
       .withField("Total Levels", g.totalLevels.toString, inline = true)
       .build
-    ).getOrElse(embedBuilder.defaultErrorColor.defaultErrorThumbnail.title("Guild Information Error").description(s"Could not retrieve data for ${Markdown.bold(parsedGuildName)}").build)
+    ).getOrElse(embedBuilder.defaultErrorColor.defaultErrorThumbnail.description(s"Could not retrieve data for ${Markdown.bold(parsedGuildName)}").build)
 
     BotEnvironment.client.foreach(client => client.requestsHelper.run(DeleteMessage(msg.textChannel.id, msg.message.id))(msg.cache))
     CreateMessage(msg.textChannel.id, CreateMessageData(embed = Option(embed)))

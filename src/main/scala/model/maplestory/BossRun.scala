@@ -1,15 +1,29 @@
 package org.maple
 package model.maplestory
 
+import config.BotEnvironment
 import utils.IterableUtils.IterableImprovements
 import utils.discord.Markdown
 
-import org.maple.config.BotEnvironment
+import spray.json.{JsArray, JsBoolean, JsNumber, JsObject, JsString, JsValue}
 
 import java.time.Instant
+import java.util.UUID
 import scala.collection.immutable.ListSet
 
-case class BossRun(messageId: String, timestamp: Instant, hostId: String, channelId: String, description: String, mentions: ListSet[String] = ListSet.empty, finalised: Boolean = false) {
+case class BossRun(messageId: String, timestamp: Instant, hostId: String, channelId: String, description: String, id: String = UUID.randomUUID().toString, mentions: ListSet[String] = ListSet.empty, finalised: Boolean = false) {
+
+  def toJsValue: JsValue = JsObject(
+    "messageId" -> JsString(messageId),
+    "timestamp" -> JsNumber(timestamp.toEpochMilli),
+    "hostId" -> JsString(hostId),
+    "channelId" -> JsString(channelId),
+    "description" -> JsString(description),
+    "id" -> JsString(id),
+    "mentions" -> JsArray.apply(mentions.map(JsString.apply).toVector),
+    "finalised" -> JsBoolean(finalised)
+  )
+
   def asString: String = s"<@$hostId> is hosting an event in channel <#$channelId>.\n\n$descriptionBody\n\n$mentionsAsString\n$footerDescription"
 
   def descriptionBody: String = Markdown.bold("Description") + "\n" + description
@@ -33,8 +47,10 @@ case class BossRun(messageId: String, timestamp: Instant, hostId: String, channe
     "- React with \uD83D\uDC4C to finalise the roster" + "\n" +
     s"- Use command ${Markdown.hightlight(BotEnvironment.prefix + "ha [names/mentions]")} to add other people to the roster. Example: ${Markdown.hightlight(BotEnvironment.prefix + "ha ahri @Gon @Franco alex")}" + "\n" +
     s"- Use command ${Markdown.hightlight(BotEnvironment.prefix + "hk [numbers in roster]")} to remove people from the roster. Example: ${Markdown.hightlight(BotEnvironment.prefix + "hk 1 3")}" + "\n" +
-    s"- Use command ${Markdown.hightlight(BotEnvironment.prefix + "hdm [new description]")} to modify the description of the event." + "\n" + "\n" +
+    s"- Use command ${Markdown.hightlight(BotEnvironment.prefix + "hdm [new description]")} to modify the description of the event." + "\n" +
+    s"- Use command ${Markdown.hightlight(BotEnvironment.prefix + "hf")} to end the event and close registrations." + "\n" +
+    s"- Use command ${Markdown.hightlight(BotEnvironment.prefix + "hr")} to repeat the event message in the channel." + "\n" + "\n" +
     "--"
 
-  def finalise: BossRun = BossRun(this.messageId, this.timestamp, this.hostId, this.channelId, this.description, this.mentions, finalised = true)
+  def finalise: BossRun = BossRun(this.messageId, this.timestamp, this.hostId, this.channelId, this.description, this.id, this.mentions, finalised = true)
 }

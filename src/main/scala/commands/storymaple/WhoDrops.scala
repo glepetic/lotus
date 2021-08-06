@@ -22,16 +22,16 @@ class WhoDrops extends MyCommand {
 
     val embedBuilder = EmbedBuilder
       .builder
+      .title(msg.message.content)
       .authorRequestedBy(msg.user)
       .defaultFooter
 
     val embed = item.map(i => embedBuilder
       .defaultColor
       .defaultThumbnail
-      .title(i.name.toUpperCase)
       .description(i.mobs.joinLines)
       .build
-    ).getOrElse(embedBuilder.defaultErrorColor.defaultErrorThumbnail.title("Item Information Error").description(s"Could not retrieve data for ${Markdown.bold(parsedItemName)}").build)
+    ).getOrElse(embedBuilder.defaultErrorColor.defaultErrorThumbnail.description(s"Could not retrieve data for ${Markdown.bold(parsedItemName)}").build)
 
     BotEnvironment.client.foreach(client => client.requestsHelper.run(DeleteMessage(msg.textChannel.id, msg.message.id))(msg.cache))
     CreateMessage(msg.textChannel.id, CreateMessageData(embed = Option(embed)))

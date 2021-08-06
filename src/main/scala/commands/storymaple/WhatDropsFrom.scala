@@ -22,16 +22,16 @@ class WhatDropsFrom extends MyCommand {
 
     val embedBuilder = EmbedBuilder
       .builder
+      .title(msg.message.content)
       .authorRequestedBy(msg.user)
       .defaultFooter
 
     val embed = drops.map(d => embedBuilder
       .defaultColor
       .defaultThumbnail
-      .title(parsedMobName.toUpperCase)
       .description(d.map(_.name).joinLines)
       .build
-    ).getOrElse(embedBuilder.defaultErrorColor.defaultErrorThumbnail.title("Item Information Error").description(s"Could not retrieve data for ${Markdown.bold(parsedMobName)}").build)
+    ).getOrElse(embedBuilder.defaultErrorColor.defaultErrorThumbnail.description(s"Could not retrieve data for ${Markdown.bold(parsedMobName)}").build)
 
     BotEnvironment.client.foreach(client => client.requestsHelper.run(DeleteMessage(msg.textChannel.id, msg.message.id))(msg.cache))
     CreateMessage(msg.textChannel.id, CreateMessageData(embed = Option(embed)))
