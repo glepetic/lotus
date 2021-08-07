@@ -11,6 +11,8 @@ import java.io.File
 
 object BotEnvironment {
 
+  System.setProperty("jdk.tls.client.protocols", "TLSv1.2")
+
   val resourcesPath: String = System.getProperty("user.dir") + "/src/main/resources"
 
   private val config: Config = ConfigFactory.parseFile(new File(resourcesPath + "/" + "application.properties"))

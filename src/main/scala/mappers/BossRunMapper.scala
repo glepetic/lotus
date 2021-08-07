@@ -4,7 +4,7 @@ package mappers
 import model.maplestory.BossRun
 
 import org.bson.Document
-import spray.json.{JsArray, JsBoolean, JsNumber, JsObject, JsString, JsValue}
+import spray.json.{JsArray, JsBoolean, JsNumber, JsObject, JsString, JsValue, _}
 
 import java.time.Instant
 import scala.collection.immutable.ListSet
@@ -18,7 +18,7 @@ class BossRunMapper {
     d.getString("channelId"),
     d.getString("description"),
     d.getString("id"),
-    d.getOrDefault("mentions", ListSet.empty).asInstanceOf[ListSet[String]],
+    ListSet.from(d.toJson.parseJson.asJsObject.fields.getOrElse("mentions", JsArray.empty).asInstanceOf[JsArray].elements.map(elem => elem.asInstanceOf[JsString].value)),
     d.getBoolean("finalised")
   )
 

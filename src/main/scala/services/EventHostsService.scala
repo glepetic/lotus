@@ -17,7 +17,7 @@ class EventHostsService {
   def find(messageId: String): SingleObservable[BossRun] = this.hostsRepository
     .mongoFind(messageId)
     .map(this.bossRunMapper.to)
-  def find(hostId: String, channelId: String): SingleObservable[BossRun] = this.hostsRepository
+  def findLatest(hostId: String, channelId: String): SingleObservable[BossRun] = this.hostsRepository
     .mongoFindLatest(hostId, channelId)
     .map(this.bossRunMapper.to)
 

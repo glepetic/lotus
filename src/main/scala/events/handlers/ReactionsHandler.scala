@@ -3,12 +3,13 @@ package events.handlers
 
 import config.BotEnvironment
 import model.maplestory.BossRun
-import repositories.HostsRepository
+import services.EventHostsService
 
 import ackcord.data.{MessageId, TextChannelId}
 import ackcord.requests.{DeleteAllReactions, DeleteUserReaction, EditMessage, EditMessageData}
 import ackcord.util.JsonOption
 import ackcord.{APIMessage, EventListenerMessage}
+import org.mongodb.scala.Observable
 
 import scala.collection.immutable.ListSet
 
@@ -35,13 +36,13 @@ object ReactionsHandler {
       )
       .getOrElse((br: BossRun, _: String) => br)
 
-    val hostsRepository: HostsRepository = HostsRepository.getInstance
-    val maybeBossRun: Option[BossRun] = hostsRepository
+    val hostsService: EventHostsService = EventHostsService.getInstance
+    val maybeBossRun: Observable[BossRun] = hostsService
       .find(evt.messageId.toString)
 
     maybeBossRun.foreach(br => {
       val maybeUpdatedBossRun = evt.user.filter(_ => !br.finalised).map(usr => mapper(br, usr.mentionNick))
-      maybeUpdatedBossRun.foreach(hostsRepository.update)
+      maybeUpdatedBossRun.foreach(hostsService.replace)
       val bossRunAsString = maybeUpdatedBossRun.map(_.asString)
       val channelId = TextChannelId(br.channelId)
       val messageId = MessageId(br.messageId)

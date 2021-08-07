@@ -16,6 +16,7 @@ libraryDependencies ++= Seq(
   "org.slf4j" % "slf4j-api" % "1.7.25",
   "ch.qos.logback" % "logback-classic" % "1.2.3"
 )
+
 excludeDependencies += "org.apache.logging.log4j" % "log4j-slf4j-impl"
 
 enablePlugins(JavaAppPackaging)

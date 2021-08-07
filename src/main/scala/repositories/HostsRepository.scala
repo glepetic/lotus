@@ -17,14 +17,14 @@ class HostsRepository extends MongoRepository {
   var bossRuns: List[BossRun] = Nil
 
   def mongoFind(messageId: String): SingleObservable[Document] = this.collection
-    .find(equal("mesageId", messageId))
+    .find(equal("messageId", messageId))
     .first
   def mongoFindLatest(hostId: String, channelId: String): SingleObservable[Document] = this.collection
     .find(and(equal("hostId", hostId), equal("channelId", channelId)))
     .sort(descending("timestamp"))
     .first
-  def mongoInsert(d: Document): Unit = this.collection.insertOne(d)
-  def mongoReplace(d: Document): Unit = this.collection.replaceOne(equal("id", d.getString("id")), d)
+  def mongoInsert(d: Document): Unit = this.collection.insertOne(d).foreach(println)
+  def mongoReplace(d: Document): Unit = this.collection.replaceOne(equal("id", d.getString("id")), d).foreach(println)
 
 
   def insert(br: BossRun): Unit = this.bossRuns = this.bossRuns ++ List(br)
