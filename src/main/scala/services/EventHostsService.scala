@@ -12,13 +12,13 @@ class EventHostsService {
   private val hostsRepository: HostsRepository = HostsRepository.getInstance
   private val bossRunMapper: BossRunMapper = new BossRunMapper
 
-  def insert(br: BossRun): Unit = this.hostsRepository.mongoInsert(this.bossRunMapper.to(br))
-  def replace(br: BossRun): Unit = this.hostsRepository.mongoReplace(this.bossRunMapper.to(br))
+  def insert(br: BossRun): Unit = this.hostsRepository.insert(this.bossRunMapper.to(br))
+  def replace(br: BossRun): Unit = this.hostsRepository.replace(this.bossRunMapper.to(br))
   def find(messageId: String): SingleObservable[BossRun] = this.hostsRepository
-    .mongoFind(messageId)
+    .find(messageId)
     .map(this.bossRunMapper.to)
   def findLatest(hostId: String, channelId: String): SingleObservable[BossRun] = this.hostsRepository
-    .mongoFindLatest(hostId, channelId)
+    .findLatest(hostId, channelId)
     .map(this.bossRunMapper.to)
 
 }
