@@ -9,6 +9,7 @@ import utils.discord.Markdown
 
 import ackcord.commands.UserCommandMessage
 import ackcord.requests.{CreateMessage, CreateMessageData, Request}
+import org.maple.dto.RaiderDto
 
 class BossRoster extends MyCommand {
   override def aliases: Seq[String] = Seq("br","bossroster")
@@ -28,15 +29,9 @@ class BossRoster extends MyCommand {
       .defaultColor
       .defaultThumbnail
       .title("Boss Roster")
-      .withOptField("Party 1", Option(br.party1Raiders)
-          .filter(_.nonEmpty)
-        .map(pt1 => Markdown.codeSnippet(pt1.map(r => s"${this.completeSpaces(r.ign, 14)}${this.completeSpaces(r.level.toString, 5)}${this.completeSpaces(r.job.name, 14)}${this.completeSpaces(s"[${r.links} Links]",10)}").joinLines)))
-      .withOptField("Party 2", Option(br.party2Raiders)
-        .filter(_.nonEmpty)
-        .map(pt2 => Markdown.codeSnippet(pt2.map(r => s"${this.completeSpaces(r.ign, 14)}${this.completeSpaces(r.level.toString, 5)}${this.completeSpaces(r.job.name, 14)}${this.completeSpaces(s"[${r.links} Links]",10)}").joinLines)))
-      .withOptField("Fillers", Option(br.fillers)
-        .filter(_.nonEmpty)
-        .map(fillers => Markdown.codeSnippet(fillers.map(r => s"${this.completeSpaces(r.ign, 14)}${this.completeSpaces(r.level.toString, 5)}${this.completeSpaces(r.job.name, 14)}${this.completeSpaces(s"[${r.links} Links]",10)}").joinLines)))
+      .withOptField("Party 1", this.partyAsStringOpt(br.party1Raiders))
+      .withOptField("Party 2", this.partyAsStringOpt(br.party2Raiders))
+      .withOptField("Fillers", this.partyAsStringOpt(br.fillers))
       .withField("Jobs", br.jobs.map(j => s"${j.name} - ${Markdown.bold(j.count.toString)}").joinLines)
       .withField("Unique Jobs", br.uniqueJobsCount.toString, inline = true)
       .withField("Total Characters", br.totalCharacters.toString, inline = true)
@@ -46,6 +41,8 @@ class BossRoster extends MyCommand {
     CreateMessage(msg.textChannel.id, CreateMessageData(embed = Option(embed)))
   }
 
+  private def partyAsStringOpt(party: List[RaiderDto]): Option[String] = Option(party).filter(_.nonEmpty).map(this.partyAsString)
+  private def partyAsString(party: List[RaiderDto]): String = Markdown.codeSnippet(party.map(r => s"${this.completeSpaces(r.ign, 14)}${this.completeSpaces(r.level.toString, 5)}${this.completeSpaces(r.job.name, 14)}${s"[${r.links} Links]"}").joinLines)
   private def completeSpaces(content: String, n: Int): String = content + (1 to n-content.length).map(_ => " ").join
 
 }
