@@ -17,7 +17,7 @@ class BossRoster extends MyCommand {
     val bossRunsService = new BossRunsService()
 
     val bossRoster = Option(bossRunsService.getRoster(arguments))
-      .filter(roster => roster.raiders.nonEmpty)
+      .filter(roster => roster.hasRaiders)
 
     val embedBuilder = EmbedBuilder
       .builder
@@ -28,7 +28,15 @@ class BossRoster extends MyCommand {
       .defaultColor
       .defaultThumbnail
       .title("Boss Roster")
-      .description(br.raiders.map(r => s"${Markdown.bold(r.ign)} - Lvl. ${r.level} - ${Markdown.bold(r.job.name)} [${r.links} Links]").joinLines)
+      .withOptField("Party 1", Option(br.party1Raiders)
+          .filter(_.nonEmpty)
+        .map(pt1 => Markdown.codeSnippet(pt1.map(r => s"${this.completeSpaces(r.ign, 14)}${this.completeSpaces(r.level.toString, 5)}${this.completeSpaces(r.job.name, 14)}${this.completeSpaces(s"[${r.links} Links]",10)}").joinLines)))
+      .withOptField("Party 2", Option(br.party2Raiders)
+        .filter(_.nonEmpty)
+        .map(pt2 => Markdown.codeSnippet(pt2.map(r => s"${this.completeSpaces(r.ign, 14)}${this.completeSpaces(r.level.toString, 5)}${this.completeSpaces(r.job.name, 14)}${this.completeSpaces(s"[${r.links} Links]",10)}").joinLines)))
+      .withOptField("Fillers", Option(br.fillers)
+        .filter(_.nonEmpty)
+        .map(fillers => Markdown.codeSnippet(fillers.map(r => s"${this.completeSpaces(r.ign, 14)}${this.completeSpaces(r.level.toString, 5)}${this.completeSpaces(r.job.name, 14)}${this.completeSpaces(s"[${r.links} Links]",10)}").joinLines)))
       .withField("Jobs", br.jobs.map(j => s"${j.name} - ${Markdown.bold(j.count.toString)}").joinLines)
       .withField("Unique Jobs", br.uniqueJobsCount.toString, inline = true)
       .withField("Total Characters", br.totalCharacters.toString, inline = true)
@@ -37,4 +45,7 @@ class BossRoster extends MyCommand {
 
     CreateMessage(msg.textChannel.id, CreateMessageData(embed = Option(embed)))
   }
+
+  private def completeSpaces(content: String, n: Int): String = content + (1 to n-content.length).map(_ => " ").join
+
 }

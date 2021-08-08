@@ -12,6 +12,10 @@ class BossRosterMapper {
       .map(char => RaiderDto(player.linkLevels, char.ign, char.level, char.job))
   }
 
-  def toBossRoster(players: List[RaiderDto]): BossRosterDto = BossRosterDto(players.sortBy(-_.links))
+  def toBossRoster(players: List[RaiderDto]): BossRosterDto = BossRosterDto(
+    players.take(6).sortBy(-_.links),
+    players.slice(6,12).sortBy(-_.links),
+    players.takeRight(players.length - 12).sortBy(-_.links)
+  )
 
 }

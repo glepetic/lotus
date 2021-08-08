@@ -39,6 +39,7 @@ class EmbedBuilder(private val title: Option[String],
   def author(name: String, icon: Option[String]): EmbedBuilder = this.author(name,None,icon)
   def author(name: String, u: Option[String], icon: Option[String]): EmbedBuilder = new EmbedBuilder(title, description, url, timestamp, color, footer, image, video, thumbnail, Option(OutgoingEmbedAuthor(name,u,icon)), fields)
   def fields(f: Seq[EmbedField]): EmbedBuilder = new EmbedBuilder(title, description, url, timestamp, color, footer, image, video, thumbnail, author, f)
+  def withOptField(name: String, contentOpt: Option[String]): EmbedBuilder =  contentOpt.map(content => this.withField(name, content)).getOrElse(this)
   def withField(name: String, content: String): EmbedBuilder =  this.withField(name,content,inline = false)
   def withField(name: String, content: String, inline: Boolean): EmbedBuilder = new EmbedBuilder(title, description, url, timestamp, color, footer, image, video, thumbnail, author, fields ++ Seq(EmbedField(name, content, Option(inline))))
 
