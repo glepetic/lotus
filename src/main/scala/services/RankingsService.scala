@@ -14,7 +14,7 @@ class RankingsService {
   def getRankings: List[Player] = client.getRankings.map(rjson => this.parser.parse(rjson)).getOrElse(Nil)
 
   def getPlayer(ign: String): Option[Player] = this.getRankings.find(p => p.characters.map(c => c.ign.toLowerCase).contains(ign.toLowerCase))
-  def getPlayer(rank: Int): Option[Player] = this.getRankings.find(p => p.rank == rank)
+  def getPlayer(rank: Long): Option[Player] = this.getRankings.find(p => p.rank == rank)
 
   def getGuild(name: String): Option[MapleGuild] = Option(this.getRankings.flatMap(p => p.characters.filter(c => name equalsIgnoreCase c.guild)))
       .filter(chars => chars.nonEmpty)

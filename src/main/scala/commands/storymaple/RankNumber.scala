@@ -10,20 +10,25 @@ import utils.discord.Markdown
 
 import ackcord.commands.UserCommandMessage
 import ackcord.requests.{CreateMessage, CreateMessageData, DeleteMessage, Request}
+import org.maple.model.maplestory.Player
 
-class Rank extends MyCommand {
-  override def aliases: Seq[String] = Seq("r","rank")
+class RankNumber extends MyCommand {
+  override def aliases: Seq[String] = Seq("rn","ranknumber")
 
   override def execute(msg: UserCommandMessage[_], arguments: List[String]): Request[_] = {
-    val rankingsService = new RankingsService()
+    val rankingsService = new RankingsService
 
-    val parsedIgn = arguments.join.trim
-    val player = rankingsService.getPlayer(parsedIgn)
+    val parsedArgument = arguments.join.trim
+
+    val playerOpt: Option[Player] = Option(parsedArgument)
+      .filter(str => str forall Character.isDigit)
+      .map(_.toLong)
+      .flatMap(rankingsService.getPlayer)
 
     val embedMapper = new EmbedMapper
 
-    val embed = player.map(p => embedMapper.toEmbed(p, msg.message.content, msg.user))
-      .getOrElse(embedMapper.toErrorEmbed(s"Could not retrieve data for ${Markdown.bold(parsedIgn)}", msg.message.content, msg.user))
+    val embed = playerOpt.map(p => embedMapper.toEmbed(p, msg.message.content, msg.user))
+      .getOrElse(embedMapper.toErrorEmbed(s"Could not retrieve data for ${Markdown.bold(parsedArgument)}", msg.message.content, msg.user))
 
     BotEnvironment.client.foreach(client => client.requestsHelper.run(DeleteMessage(msg.textChannel.id, msg.message.id))(msg.cache))
     CreateMessage(msg.textChannel.id, CreateMessageData(embed = Option(embed)))

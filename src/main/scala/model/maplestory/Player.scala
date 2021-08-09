@@ -3,7 +3,7 @@ package model.maplestory
 
 import utils.OptionUtils._
 
-case class Player(rank: Int, characters: List[MapleCharacter]) {
+case class Player(rank: Long, characters: List[MapleCharacter]) {
   def nirvana: Int = this.topUniqueBranchCharacters.map(c => c.level).filter(lvl => lvl > 200).sum
   def linkLevels: Int = this.topUniqueBranchCharacters.map(c => c.level).filter(lvl => lvl >= 30).sum
 
