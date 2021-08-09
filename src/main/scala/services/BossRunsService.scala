@@ -20,11 +20,6 @@ class BossRunsService {
       .map(_.get)
       .toList
 
-    //    val raiders = this.rankingsService.getRankings
-    //      .filter(player => player.characters.exists(c => igns.map(_.toLowerCase) contains c.ign.toLowerCase))
-    //      .map(player => this.bossRosterMapper.toRaider(player, igns))
-    //      .filter(_.nonEmpty)
-    //      .map(_.get)
     this.bossRosterMapper.toBossRoster(raiders)
   }
 }

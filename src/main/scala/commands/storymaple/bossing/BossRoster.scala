@@ -42,7 +42,7 @@ class BossRoster extends MyCommand {
   }
 
   private def partyAsStringOpt(party: List[RaiderDto]): Option[String] = Option(party).filter(_.nonEmpty).map(this.partyAsString)
-  private def partyAsString(party: List[RaiderDto]): String = Markdown.codeSnippet(party.map(r => s"${this.completeSpaces(r.ign, 14)}${this.completeSpaces(r.level.toString, 5)}${this.completeSpaces(r.job.name, 14)}${s"[${r.links} Links]"}").joinLines)
+  private def partyAsString(party: List[RaiderDto]): String = Markdown.codeSnippet(party.map(r => s"${this.completeSpaces(r.ign, 14)}${this.completeSpaces(r.level.toString, 5)}${this.completeSpaces(r.job.name, 14)}${s"[${this.completeSpaces(r.links.toString, 4)} Links]"}").joinLines)
   private def completeSpaces(content: String, n: Int): String = content + (1 to n-content.length).map(_ => " ").join
 
 }
