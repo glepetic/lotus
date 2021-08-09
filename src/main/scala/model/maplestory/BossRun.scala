@@ -25,7 +25,7 @@ case class BossRun(messageId: String, timestamp: Instant, hostId: String, channe
   def footerDescription: String = Option(finalised)
     .filter(f => !f)
     .map(_ => this.runOptions)
-    .getOrElse("This event has ended.")
+    .getOrElse("Registrations for this event have been closed.")
 
   def runOptions: String = Markdown.bold("Options") + "\n" +
     "- React with <:greencheck:871199809493671978> to be added to the roster" + "\n" +
