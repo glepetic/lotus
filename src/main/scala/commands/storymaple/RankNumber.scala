@@ -31,6 +31,6 @@ class RankNumber extends MyCommand {
       .getOrElse(embedMapper.toErrorEmbed(s"Could not retrieve data for ${Markdown.bold(parsedArgument)}", msg.message.content, msg.user))
 
     BotEnvironment.client.foreach(client => client.requestsHelper.run(DeleteMessage(msg.textChannel.id, msg.message.id))(msg.cache))
-    CreateMessage(msg.textChannel.id, CreateMessageData(embed = Option(embed)))
+    CreateMessage(msg.textChannel.id, CreateMessageData(embeds = Seq(embed)))
   }
 }

@@ -38,7 +38,7 @@ class BossRoster extends MyCommand {
       .build
     ).getOrElse(embedBuilder.defaultErrorColor.defaultErrorThumbnail.title("Boss Roster Error").description(s"Could not retrieve data for ${Markdown.bold(arguments.joinWords)}").build)
 
-    CreateMessage(msg.textChannel.id, CreateMessageData(embed = Option(embed)))
+    CreateMessage(msg.textChannel.id, CreateMessageData(embeds = Seq(embed)))
   }
 
   private def partyAsStringOpt(party: List[RaiderDto]): Option[String] = Option(party).filter(_.nonEmpty).map(this.partyAsString)

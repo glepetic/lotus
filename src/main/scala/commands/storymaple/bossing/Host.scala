@@ -8,7 +8,7 @@ import repositories.HostsRepository
 import utils.IterableUtils.IterableImprovements
 
 import ackcord.commands.UserCommandMessage
-import ackcord.data.User
+import ackcord.data.{MessageId, User}
 import ackcord.requests.{CreateMessage, CreateMessageData, CreateReaction, Request}
 import ackcord.syntax.TextChannelSyntax
 import org.maple.services.EventHostsService
@@ -31,7 +31,10 @@ class Host extends MyCommand {
       .toFutureOption() onComplete {
       case Success(maybeBr) => maybeBr
         .filter(br => !br.finalised)
-        .map(_ => () => BotEnvironment.client.foreach(client => client.requestsHelper.run(CreateMessage(msg.textChannel.id, CreateMessageData("You are already hosting a run on this channel. End your previous one before hosting a new one!")))(msg.cache)))
+        .map(br => () => BotEnvironment.client
+          .foreach(client => client.requestsHelper.run(
+            CreateMessage(msg.textChannel.id,
+              CreateMessageData("You are already hosting a run on this channel. End your previous one before hosting a new one!", replyTo = Option(MessageId(br.messageId)))))(msg.cache)))
         .getOrElse(() => BotEnvironment.client.foreach(client => client.requestsHelper.run(msg.textChannel.sendMessage(bossRun.asString))(msg.cache)
           .foreach(sentMsg => {
             hostsService.insert(BossRun(sentMsg.id.toString, Instant.now, host.id.toString, sentMsg.channelId.toString, description))

@@ -36,6 +36,6 @@ class GuildCharacters extends MyCommand {
     ).getOrElse(embedBuilder.defaultErrorColor.defaultErrorThumbnail.description(s"Could not retrieve data for ${Markdown.bold(parsedGuildName)}").build)
 
     BotEnvironment.client.foreach(client => client.requestsHelper.run(DeleteMessage(msg.textChannel.id, msg.message.id))(msg.cache))
-    CreateMessage(msg.textChannel.id, CreateMessageData(embed = Option(embed)))
+    CreateMessage(msg.textChannel.id, CreateMessageData(embeds = Seq(embed)))
   }
 }

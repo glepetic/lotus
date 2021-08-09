@@ -7,7 +7,11 @@ scalaVersion := "2.13.6"
 idePackagePrefix := Some("org.maple")
 
 resolvers += Resolver.JCenterRepository
-libraryDependencies += "net.katsstuff" %% "ackcord" % "0.17.1"
+resolvers += Resolver.sonatypeRepo("snapshots")
+//resolvers += Resolver.sonatypeRepo("snapshot")
+resolvers += "dv8tion" at "https://m2.dv8tion.net/releases"
+
+libraryDependencies += "net.katsstuff" %% "ackcord" % "0.18.0-SNAPSHOT"
 libraryDependencies +=  "org.scalaj" %% "scalaj-http" % "2.4.2"
 libraryDependencies += "io.spray" %%  "spray-json" % "1.3.6"
 libraryDependencies += "org.mongodb.scala" %% "mongo-scala-driver" % "4.1.1"
