@@ -29,9 +29,9 @@ class BossRoster extends MyCommand {
       .defaultColor
       .defaultThumbnail
       .title("Boss Roster")
-      .withOptField("Party 1", this.partyAsStringOpt(br.party1Raiders))
-      .withOptField("Party 2", this.partyAsStringOpt(br.party2Raiders))
-      .withOptField("Fillers", this.partyAsStringOpt(br.fillers))
+      .withOptField(s"Party 1  -  (${br.party1Raiders.length}/6)", this.partyAsStringOpt(br.party1Raiders))
+      .withOptField(s"Party 2  -  (${br.party2Raiders.length}/6)", this.partyAsStringOpt(br.party2Raiders))
+      .withOptField(s"Fillers  -  (${br.fillers.length})", this.partyAsStringOpt(br.fillers))
       .withField("Jobs", br.jobs.map(j => s"${j.name} - ${Markdown.bold(j.count.toString)}").joinLines)
       .withField("Unique Jobs", br.uniqueJobsCount.toString, inline = true)
       .withField("Total Characters", br.totalCharacters.toString, inline = true)
