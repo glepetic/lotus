@@ -14,5 +14,6 @@ object HttpClientConfig {
 
   val worldTimeApiHost: String = getStringProperty("worldtime.api.host").orThrow
   val worldTimeApiTimezonesUrl: String = getStringProperty("worldtime.api.timezones.url").orThrow
+  val worldTimeApiTimeout: Int = getIntProperty("worldtime.api.timeout").orThrow
 
 }

@@ -3,26 +3,17 @@ package clients
 
 import config.{BotEnvironment, HttpClientConfig}
 
-import scalaj.http.Http
+import scalaj.http.{Http, HttpRequest}
 import spray.json._
 
-class WorldTimeApiClient {
+class WorldTimeApiClient extends MyClient {
 
-  val host: String = HttpClientConfig.worldTimeApiHost
+  override protected def host: String = HttpClientConfig.worldTimeApiHost
+  override protected def timeout: Int = HttpClientConfig.worldTimeApiTimeout
+
   val timezones: String = HttpClientConfig.worldTimeApiTimezonesUrl
 
-  def getTimezones: JsValue = {
-    Http(host + timezones)
-      .asString
-      .body
-      .parseJson
-  }
-
-  def getTime(timezone: String): JsValue = {
-    Http(host + timezones + "/" + timezone)
-      .asString
-      .body
-      .parseJson
-  }
+  def getTimezones: Option[JsValue] = this.get(timezones)
+  def getTime(timezone: String): Option[JsValue] = this.get(timezones + "/" + timezone)
 
 }

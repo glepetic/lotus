@@ -18,8 +18,9 @@ class Timezones extends MyCommand {
     val parsedArgs = arguments.join
     val timezonesService = new TimezonesService
 
-    val timezones = timezonesService.getTimezones(parsedArgs)
-    val timezoneString = Option(timezones.joinWords)
+    val timezoneString = timezonesService
+      .getTimezones(parsedArgs)
+      .map(_.joinWords)
       .filter(t => t.nonEmpty)
 
     val output = timezoneString match {
