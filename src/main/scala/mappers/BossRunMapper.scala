@@ -18,7 +18,8 @@ class BossRunMapper {
     d.getString("channelId"),
     d.getString("description"),
     d.getString("id"),
-    ListSet.from(d.toJson.parseJson.asJsObject.fields.getOrElse("mentions", JsArray.empty).asInstanceOf[JsArray].elements.map(elem => elem.asInstanceOf[JsString].value)),
+    this.getAndMapCollectionFromDocument(d, "cohosts").toList,
+    ListSet.from(this.getAndMapCollectionFromDocument(d, "participants")),
     d.getBoolean("finalised")
   )
 
@@ -31,8 +32,11 @@ class BossRunMapper {
     "channelId" -> JsString(br.channelId),
     "description" -> JsString(br.description),
     "id" -> JsString(br.id),
-    "mentions" -> JsArray.apply(br.mentions.map(JsString.apply).toVector),
+    "cohosts" -> JsArray.apply(br.cohosts.map(JsString.apply).toVector),
+    "participants" -> JsArray.apply(br.participants.map(JsString.apply).toVector),
     "finalised" -> JsBoolean(br.finalised)
   )
+
+  private def getAndMapCollectionFromDocument(d: Document, key: String): Iterable[String] = d.toJson.parseJson.asJsObject.fields.getOrElse(key, JsArray.empty).asInstanceOf[JsArray].elements.map(_.asInstanceOf[JsString].value)
 
 }

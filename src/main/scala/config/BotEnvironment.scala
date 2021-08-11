@@ -25,5 +25,6 @@ object BotEnvironment {
   val token: String = sys.env.get("discord.bot.token").orThrow
   val prefix: String = sys.env.getOrElse("discord.bot.prefix", ".")
   val botOwnerUsername: String = this.getStringProperty("bot.owner.user").orThrow
+  val botOwnerId: String = this.getStringProperty("bot.owner.id").orThrow
 
 }

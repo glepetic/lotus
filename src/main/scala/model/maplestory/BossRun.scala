@@ -9,14 +9,22 @@ import java.time.Instant
 import java.util.UUID
 import scala.collection.immutable.ListSet
 
-case class BossRun(messageId: String, timestamp: Instant, hostId: String, channelId: String, description: String, id: String = UUID.randomUUID().toString, mentions: ListSet[String] = ListSet.empty, finalised: Boolean = false) {
+case class BossRun(messageId: String,
+                   timestamp: Instant,
+                   hostId: String,
+                   channelId: String,
+                   description: String,
+                   id: String = UUID.randomUUID().toString,
+                   cohosts: List[String] = List(BotEnvironment.botOwnerId),
+                   participants: ListSet[String] = ListSet.empty,
+                   finalised: Boolean = false) {
 
-  def asString: String = s"<@$hostId> is hosting an event in channel <#$channelId>.\n\n$descriptionBody\n\n$mentionsAsString\n$footerDescription"
+  def asString: String = s"<@$hostId> is hosting an event in channel <#$channelId>.\n\n$descriptionBody\n\n$participantsAsString\n$footerDescription"
 
   def descriptionBody: String = Markdown.bold("Description") + "\n" + description
 
-  def mentionsAsString: String = Markdown.bold(s"Roster (${mentions.size})") + "\n" +
-    Option(mentions.zipWithIndex)
+  def participantsAsString: String = Markdown.bold(s"Roster (${participants.size})") + "\n" +
+    Option(participants.zipWithIndex)
       .filter(mts => mts.nonEmpty)
       .map(mts => mts.map { case (mention, index) => s"${index + 1}. $mention" })
       .map(_.joinLines)
@@ -39,5 +47,10 @@ case class BossRun(messageId: String, timestamp: Instant, hostId: String, channe
     s"- Use command ${Markdown.hightlight(BotEnvironment.prefix + "hr")} to repeat the event message in the channel." + "\n" + "\n" +
     "--"
 
-  def finalise: BossRun = BossRun(this.messageId, this.timestamp, this.hostId, this.channelId, this.description, this.id, this.mentions, finalised = true)
+  def withCohosts(newCohosts: List[String]): BossRun = BossRun(this.messageId, this.timestamp, this.hostId, this.channelId, this.description, this.id, newCohosts, this.participants, this.finalised)
+  def withDescription(newDescription: String): BossRun = BossRun(this.messageId, this.timestamp, this.hostId, this.channelId, newDescription, this.id, this.cohosts, this.participants, this.finalised)
+  def withMessageId(newMessageId: String): BossRun = BossRun(newMessageId, this.timestamp, this.hostId, this.channelId, this.description, this.id, this.cohosts, this.participants, this.finalised)
+  def withParticipants(newParticipants: ListSet[String]): BossRun = BossRun(this.messageId, this.timestamp, this.hostId, this.channelId, this.description, this.id, this.cohosts, newParticipants, this.finalised)
+  def withFinalised(isFinalised: Boolean): BossRun = BossRun(this.messageId, this.timestamp, this.hostId, this.channelId, this.description, this.id, this.cohosts, this.participants, isFinalised)
+  def finalise: BossRun = this.withFinalised(true)
 }

@@ -24,7 +24,7 @@ class HostDescriptionModify extends MyCommand {
     val maybeBossRun: Observable[BossRun] = hostsService
       .findLatest(host.id.toString, msg.textChannel.id.toString)
       .filter(br => !br.finalised)
-      .map(br => BossRun(br.messageId, br.timestamp, br.hostId, br.channelId, newDescription, br.id, br.mentions))
+      .map(br => br.withDescription(newDescription))
 
     maybeBossRun.foreach(br => {
       hostsService.replace(br)

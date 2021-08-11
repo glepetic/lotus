@@ -25,7 +25,7 @@ class HostRepeat extends MyCommand {
 
     maybeBossRun.foreach(br => {
       BotEnvironment.client.foreach(client => client.requestsHelper.run(msg.textChannel.sendMessage(br.asString))(msg.cache).foreach(sentMsg => {
-        hostsService.replace(BossRun(sentMsg.id.toString, br.timestamp, br.hostId, br.channelId, br.description, br.id, br.mentions))
+        hostsService.replace(br.withMessageId(sentMsg.id.toString))
         client.requestsHelper.run(CreateReaction(sentMsg.channelId, sentMsg.id, "greencheck:871199809493671978"))(msg.cache)
           .foreach(_ => client.requestsHelper.run(CreateReaction(sentMsg.channelId, sentMsg.id, "redx:871199776572588112"))(msg.cache)
             .foreach(_ => client.requestsHelper.run(CreateReaction(sentMsg.channelId, sentMsg.id, "\uD83D\uDC4C"))(msg.cache)

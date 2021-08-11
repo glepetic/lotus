@@ -9,4 +9,5 @@ object DBConfig {
   val mongoUri: String = mongoConnectionString
     .replace("<user>", mongoUser)
     .replace("<password>", mongoPassword)
+  val defaultDB: String = sys.env.getOrElse("mongo.database", "test")
 }
