@@ -1,25 +1,25 @@
 package org.maple
 package services
 
-import mappers.BossRunMapper
-import model.maplestory.BossRun
+import mappers.HostedEventMapper
 import repositories.HostsRepository
 
+import org.maple.model.HostedEvent
 import org.mongodb.scala.SingleObservable
 
 class EventHostsService {
 
   private val hostsRepository: HostsRepository = HostsRepository.getInstance
-  private val bossRunMapper: BossRunMapper = new BossRunMapper
+  private val hostedEventMapper: HostedEventMapper = new HostedEventMapper
 
-  def insert(br: BossRun): Unit = this.hostsRepository.insert(this.bossRunMapper.to(br))
-  def replace(br: BossRun): Unit = this.hostsRepository.replace(this.bossRunMapper.to(br))
-  def find(messageId: String): SingleObservable[BossRun] = this.hostsRepository
+  def insert(he: HostedEvent): Unit = this.hostsRepository.insert(this.hostedEventMapper.to(he))
+  def replace(he: HostedEvent): Unit = this.hostsRepository.replace(this.hostedEventMapper.to(he))
+  def find(messageId: String): SingleObservable[HostedEvent] = this.hostsRepository
     .find(messageId)
-    .map(this.bossRunMapper.to)
-  def findLatest(hostId: String, channelId: String): SingleObservable[BossRun] = this.hostsRepository
+    .map(this.hostedEventMapper.to)
+  def findLatest(hostId: String, channelId: String): SingleObservable[HostedEvent] = this.hostsRepository
     .findLatest(hostId, channelId)
-    .map(this.bossRunMapper.to)
+    .map(this.hostedEventMapper.to)
 
 }
 

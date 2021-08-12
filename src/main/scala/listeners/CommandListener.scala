@@ -2,8 +2,9 @@ package org.maple
 package listeners
 
 import commands.MyCommand
-import commands.basic.{Hello, Meme, Ping, React}
-import commands.storymaple.{GuildCharacters, Rank, RankNumber, WhatDropsFrom, WhoDrops}
+import commands.basic.Meme
+import commands.host._
+import commands.storymaple._
 import commands.time.{Now, ServerTime, Timezones}
 import config.BotEnvironment
 import utils.DateTimeUtils
@@ -11,14 +12,11 @@ import utils.DateTimeUtils
 import ackcord.Requests
 import ackcord.commands.MessageParser.RemainingAsString
 import ackcord.commands._
-import org.maple.commands.storymaple.bossing.{BossRoster, Host, HostAdd, HostDescriptionModify, HostFinalise, HostKick, HostRepeat}
 
 class CommandListener(requests: Requests) extends CommandController(requests) {
 
   // basic commands
-  private val ping: MyCommand = new Ping
-  private val hello: MyCommand = new Hello
-  private val react: MyCommand = new React
+
   private val meme: MyCommand = new Meme
   // time commands
   private val now: MyCommand = new Now
@@ -37,14 +35,16 @@ class CommandListener(requests: Requests) extends CommandController(requests) {
   private val hostDescriptionModify: MyCommand = new HostDescriptionModify
   private val hostFinalise: MyCommand = new HostFinalise
   private val hostRepeat: MyCommand = new HostRepeat
+  private val hostMention: MyCommand = new HostMention
 
   val enabledNamedCommands: List[NamedCommand[_]] = this.getEnabledNamedCommands
 
   private def getEnabledNamedCommands: List[NamedCommand[_]] = {
-    val basicEnabledCommands = List(ping, hello, meme)
+    val basicEnabledCommands = List(meme)
     val timeEnabledCommands = List(now, timezones, servertime)
-    val storymapleEnabledCommands = List(rank, rankNumber, guild, whodrops, whatdropsfrom, bossroster, host, hostAdd, hostKick, hostDescriptionModify, hostFinalise, hostRepeat)
-    val allEnabledCommands = basicEnabledCommands ++ timeEnabledCommands ++ storymapleEnabledCommands
+    val hostCommands = List(host, hostAdd, hostKick, hostDescriptionModify, hostFinalise, hostRepeat, hostMention)
+    val storymapleEnabledCommands = List(rank, rankNumber, guild, whodrops, whatdropsfrom, bossroster)
+    val allEnabledCommands = basicEnabledCommands ++ timeEnabledCommands ++ hostCommands ++ storymapleEnabledCommands
     allEnabledCommands.map(c => this.toNamedCommand(c))
   }
 

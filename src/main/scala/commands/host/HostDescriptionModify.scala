@@ -1,17 +1,16 @@
 package org.maple
-package commands.storymaple.bossing
+package commands.host
 
 import commands.MyCommand
 import config.BotEnvironment
-import model.maplestory.BossRun
-import repositories.HostsRepository
+import services.EventHostsService
 import utils.IterableUtils._
 
 import ackcord.commands.UserCommandMessage
 import ackcord.data.{MessageId, TextChannelId, User}
 import ackcord.requests.{DeleteMessage, EditMessage, EditMessageData, Request}
 import ackcord.util.JsonOption
-import org.maple.services.EventHostsService
+import org.maple.model.HostedEvent
 import org.mongodb.scala.Observable
 
 class HostDescriptionModify extends MyCommand {
@@ -21,14 +20,14 @@ class HostDescriptionModify extends MyCommand {
     val newDescription: String = arguments.joinWords.trim
     val hostsService: EventHostsService = EventHostsService.getInstance
 
-    val maybeBossRun: Observable[BossRun] = hostsService
+    val hostedEventOpt: Observable[HostedEvent] = hostsService
       .findLatest(host.id.toString, msg.textChannel.id.toString)
-      .filter(br => !br.finalised)
-      .map(br => br.withDescription(newDescription))
+      .filter(he => !he.finalised)
+      .map(he => he.withDescription(newDescription))
 
-    maybeBossRun.foreach(br => {
-      hostsService.replace(br)
-      BotEnvironment.client.foreach(client => client.requestsHelper.run(EditMessage(TextChannelId(br.channelId), MessageId(br.messageId), EditMessageData(JsonOption.fromOptionWithNull(Option(br.asString)))))(msg.cache))
+    hostedEventOpt.foreach(he => {
+      hostsService.replace(he)
+      BotEnvironment.client.foreach(client => client.requestsHelper.run(EditMessage(TextChannelId(he.channelId), MessageId(he.messageId), EditMessageData(JsonOption.fromOptionWithNull(Option(he.asString)))))(msg.cache))
     })
 
     DeleteMessage(msg.textChannel.id, msg.message.id)

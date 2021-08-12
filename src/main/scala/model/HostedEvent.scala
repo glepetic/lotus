@@ -1,5 +1,5 @@
 package org.maple
-package model.maplestory
+package model
 
 import config.BotEnvironment
 import utils.IterableUtils.IterableImprovements
@@ -9,15 +9,15 @@ import java.time.Instant
 import java.util.UUID
 import scala.collection.immutable.ListSet
 
-case class BossRun(messageId: String,
-                   timestamp: Instant,
-                   hostId: String,
-                   channelId: String,
-                   description: String,
-                   id: String = UUID.randomUUID().toString,
-                   cohosts: List[String] = List(BotEnvironment.botOwnerId),
-                   participants: ListSet[String] = ListSet.empty,
-                   finalised: Boolean = false) {
+case class HostedEvent(messageId: String,
+                       timestamp: Instant,
+                       hostId: String,
+                       channelId: String,
+                       description: String,
+                       id: String = UUID.randomUUID().toString,
+                       cohosts: List[String] = Nil,
+                       participants: ListSet[String] = ListSet.empty,
+                       finalised: Boolean = false) {
 
   def asString: String = s"<@$hostId> is hosting an event in channel <#$channelId>.\n\n$descriptionBody\n\n$participantsAsString\n$footerDescription"
 
@@ -47,10 +47,17 @@ case class BossRun(messageId: String,
     s"- Use command ${Markdown.hightlight(BotEnvironment.prefix + "hr")} to repeat the event message in the channel." + "\n" + "\n" +
     "--"
 
-  def withCohosts(newCohosts: List[String]): BossRun = BossRun(this.messageId, this.timestamp, this.hostId, this.channelId, this.description, this.id, newCohosts, this.participants, this.finalised)
-  def withDescription(newDescription: String): BossRun = BossRun(this.messageId, this.timestamp, this.hostId, this.channelId, newDescription, this.id, this.cohosts, this.participants, this.finalised)
-  def withMessageId(newMessageId: String): BossRun = BossRun(newMessageId, this.timestamp, this.hostId, this.channelId, this.description, this.id, this.cohosts, this.participants, this.finalised)
-  def withParticipants(newParticipants: ListSet[String]): BossRun = BossRun(this.messageId, this.timestamp, this.hostId, this.channelId, this.description, this.id, this.cohosts, newParticipants, this.finalised)
-  def withFinalised(isFinalised: Boolean): BossRun = BossRun(this.messageId, this.timestamp, this.hostId, this.channelId, this.description, this.id, this.cohosts, this.participants, isFinalised)
-  def finalise: BossRun = this.withFinalised(true)
+  def mentions: String = this.participants.filter(_.matches("<@![0-9]+>")).joinWords
+
+  def withCohosts(newCohosts: List[String]): HostedEvent = HostedEvent(this.messageId, this.timestamp, this.hostId, this.channelId, this.description, this.id, newCohosts, this.participants, this.finalised)
+
+  def withDescription(newDescription: String): HostedEvent = HostedEvent(this.messageId, this.timestamp, this.hostId, this.channelId, newDescription, this.id, this.cohosts, this.participants, this.finalised)
+
+  def withMessageId(newMessageId: String): HostedEvent = HostedEvent(newMessageId, this.timestamp, this.hostId, this.channelId, this.description, this.id, this.cohosts, this.participants, this.finalised)
+
+  def withParticipants(newParticipants: ListSet[String]): HostedEvent = HostedEvent(this.messageId, this.timestamp, this.hostId, this.channelId, this.description, this.id, this.cohosts, newParticipants, this.finalised)
+
+  def withFinalised(isFinalised: Boolean): HostedEvent = HostedEvent(this.messageId, this.timestamp, this.hostId, this.channelId, this.description, this.id, this.cohosts, this.participants, isFinalised)
+
+  def finalise: HostedEvent = this.withFinalised(true)
 }

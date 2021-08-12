@@ -1,15 +1,15 @@
 package org.maple
-package commands.storymaple.bossing
+package commands.host
 
 import commands.MyCommand
 import config.BotEnvironment
-import model.maplestory.BossRun
 import services.EventHostsService
 
 import ackcord.commands.UserCommandMessage
 import ackcord.data.{MessageId, User}
 import ackcord.requests.{CreateReaction, DeleteMessage, Request}
 import ackcord.syntax.TextChannelSyntax
+import org.maple.model.HostedEvent
 import org.mongodb.scala.Observable
 
 class HostRepeat extends MyCommand {
@@ -19,17 +19,17 @@ class HostRepeat extends MyCommand {
     val host: User = msg.user
     val hostsService: EventHostsService = EventHostsService.getInstance
 
-    val maybeBossRun: Observable[BossRun] = hostsService
+    val hostedEventOpt: Observable[HostedEvent] = hostsService
       .findLatest(host.id.toString, msg.textChannel.id.toString)
-      .filter(br => !br.finalised)
+      .filter(he => !he.finalised)
 
-    maybeBossRun.foreach(br => {
-      BotEnvironment.client.foreach(client => client.requestsHelper.run(msg.textChannel.sendMessage(br.asString))(msg.cache).foreach(sentMsg => {
-        hostsService.replace(br.withMessageId(sentMsg.id.toString))
+    hostedEventOpt.foreach(he => {
+      BotEnvironment.client.foreach(client => client.requestsHelper.run(msg.textChannel.sendMessage(he.asString))(msg.cache).foreach(sentMsg => {
+        hostsService.replace(he.withMessageId(sentMsg.id.toString))
         client.requestsHelper.run(CreateReaction(sentMsg.channelId, sentMsg.id, "greencheck:871199809493671978"))(msg.cache)
           .foreach(_ => client.requestsHelper.run(CreateReaction(sentMsg.channelId, sentMsg.id, "redx:871199776572588112"))(msg.cache)
             .foreach(_ => client.requestsHelper.run(CreateReaction(sentMsg.channelId, sentMsg.id, "\uD83D\uDC4C"))(msg.cache)
-              .foreach(_ => client.requestsHelper.run(DeleteMessage(msg.textChannel.id, MessageId(br.messageId)))(msg.cache))(client.executionContext)
+              .foreach(_ => client.requestsHelper.run(DeleteMessage(msg.textChannel.id, MessageId(he.messageId)))(msg.cache))(client.executionContext)
             )(client.executionContext)
           )(client.executionContext)
       })(client.executionContext))
