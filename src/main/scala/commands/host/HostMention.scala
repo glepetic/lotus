@@ -19,7 +19,7 @@ class HostMention extends MyCommand {
     val hostsService: EventHostsService = EventHostsService.getInstance
     hostsService
       .findLatest(host.id.toString, msg.textChannel.id.toString)
-      .filter(he => !he.finalised)
+      .filter(!_.finalised)
       .map(_.mentions + "\n\n" + contentToSend)
       .foreach(content => BotEnvironment.client.foreach(client => client.requestsHelper.run(CreateMessage(msg.textChannel.id, CreateMessageData(content)))(msg.cache)))
 

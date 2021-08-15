@@ -20,7 +20,7 @@ class HostKick extends MyCommand {
     val hostsService: EventHostsService = EventHostsService.getInstance
     val hostedEventOpt: Observable[HostedEvent] = hostsService
       .findLatest(host.id.toString, msg.textChannel.id.toString)
-      .filter(he => !he.finalised)
+      .filter(!_.finalised)
       .map(he => he.withParticipants(he.participants.zipWithIndex.filterNot{case (_,index) => participantsToBeKicked contains index+1}.map(_._1)))
     hostedEventOpt.foreach(he => {
       hostsService.replace(he)

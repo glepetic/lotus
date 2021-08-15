@@ -10,7 +10,7 @@ object MessageDeletionHandler {
   def handle(msgDeleteEvt: EventListenerMessage[APIMessage.MessageDelete]): Unit = {
     val evt = msgDeleteEvt.event
     val hostsService: EventHostsService = EventHostsService.getInstance
-    hostsService.find(evt.messageId.toString).map(_.finalise).foreach(hostsService.replace)
+    hostsService.find(evt.messageId.toString).filter(!_.finalised).map(_.finalise).foreach(hostsService.replace)
   }
 
 }

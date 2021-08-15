@@ -18,8 +18,8 @@ class HostedEventMapper {
     d.getString("channelId"),
     d.getString("description"),
     d.getString("id"),
-    this.getAndMapCollectionFromDocument(d, "cohosts").toList,
-    ListSet.from(this.getAndMapCollectionFromDocument(d, "participants")),
+    this.getAndMapListSetFromDocument(d, "cohosts"),
+    this.getAndMapListSetFromDocument(d, "participants"),
     d.getBoolean("finalised")
   )
 
@@ -37,6 +37,7 @@ class HostedEventMapper {
     "finalised" -> JsBoolean(he.finalised)
   )
 
+  private def getAndMapListSetFromDocument(d: Document, key: String): ListSet[String] = ListSet.from(this.getAndMapCollectionFromDocument(d, key))
   private def getAndMapCollectionFromDocument(d: Document, key: String): Iterable[String] = d.toJson.parseJson.asJsObject.fields.getOrElse(key, JsArray.empty).asInstanceOf[JsArray].elements.map(_.asInstanceOf[JsString].value)
 
 }

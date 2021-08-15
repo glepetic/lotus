@@ -22,7 +22,7 @@ class HostDescriptionModify extends MyCommand {
 
     val hostedEventOpt: Observable[HostedEvent] = hostsService
       .findLatest(host.id.toString, msg.textChannel.id.toString)
-      .filter(he => !he.finalised)
+      .filter(!_.finalised)
       .map(he => he.withDescription(newDescription))
 
     hostedEventOpt.foreach(he => {

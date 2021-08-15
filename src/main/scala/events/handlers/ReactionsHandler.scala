@@ -34,7 +34,9 @@ object ReactionsHandler {
         .filter(name => name equalsIgnoreCase "\uD83D\uDC4C")
         .map(_ => (he: HostedEvent, _: String) => evt.user
           .filter(usr => (usr.id.toString equals he.hostId) || (he.cohosts contains usr.id.toString))
-          .map(_ => he.finalise).getOrElse(he))
+          .map(_ => he.finalise)
+          .getOrElse(he)
+        )
       )
       .getOrElse((he: HostedEvent, _: String) => he)
 

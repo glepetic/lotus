@@ -30,7 +30,7 @@ class Host extends MyCommand {
       .findLatest(host.id.toString, msg.textChannel.id.toString)
       .toFutureOption() onComplete {
       case Success(hostedEventOpt) => hostedEventOpt
-        .filter(he => !he.finalised)
+        .filter(!_.finalised)
         .map(he => () => BotEnvironment.client
           .foreach(client => client.requestsHelper.run(
             CreateMessage(msg.textChannel.id,

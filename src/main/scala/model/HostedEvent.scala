@@ -15,7 +15,7 @@ case class HostedEvent(messageId: String,
                        channelId: String,
                        description: String,
                        id: String = UUID.randomUUID().toString,
-                       cohosts: List[String] = Nil,
+                       cohosts: ListSet[String] = ListSet.empty,
                        participants: ListSet[String] = ListSet.empty,
                        finalised: Boolean = false) {
 
@@ -49,7 +49,19 @@ case class HostedEvent(messageId: String,
 
   def mentions: String = this.participants.filter(_.matches("<@![0-9]+>")).joinWords
 
-  def withCohosts(newCohosts: List[String]): HostedEvent = HostedEvent(this.messageId, this.timestamp, this.hostId, this.channelId, this.description, this.id, newCohosts, this.participants, this.finalised)
+  def isLonelyHost: Boolean = (this.cohosts.size + 1) equals 1
+
+  def withoutHost(hId: String): HostedEvent = Option(this.hostId)
+    .filter(_.equalsIgnoreCase(hId))
+    .flatMap(_ => this.cohosts.headOption)
+    .map(headCohostId => this.withoutCohost(headCohostId).withHost(headCohostId))
+    .getOrElse(this.withoutCohost(hId))
+
+  private def withoutCohost(id: String) = this.withCohosts(this.cohosts.filterNot(_.equalsIgnoreCase(id)))
+
+  def withHost(hostId: String): HostedEvent = HostedEvent(this.messageId, this.timestamp, hostId, this.channelId, this.description, this.id, this.cohosts, this.participants, this.finalised)
+
+  def withCohosts(newCohosts: ListSet[String]): HostedEvent = HostedEvent(this.messageId, this.timestamp, this.hostId, this.channelId, this.description, this.id, newCohosts, this.participants, this.finalised)
 
   def withDescription(newDescription: String): HostedEvent = HostedEvent(this.messageId, this.timestamp, this.hostId, this.channelId, newDescription, this.id, this.cohosts, this.participants, this.finalised)
 
