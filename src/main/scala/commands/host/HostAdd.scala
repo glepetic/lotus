@@ -10,13 +10,14 @@ import ackcord.data.{MessageId, TextChannelId, User}
 import ackcord.requests.{DeleteMessage, EditMessage, EditMessageData, Request}
 import ackcord.util.JsonOption
 import org.maple.model.HostedEvent
+import org.maple.utils.IterableUtils.IterableImprovements
 import org.mongodb.scala.Observable
 
 class HostAdd extends MyCommand {
   override def aliases: Seq[String] = Seq("ha","hostadd")
   override def execute(msg: UserCommandMessage[_], arguments: List[String]): Request[_] = {
     val host: User = msg.user
-    val participants = arguments.map(_.trim)
+    val participants = arguments.join(" ").split("\\+\\+").map(_.trim)
     val hostsService: EventHostsService = EventHostsService.getInstance
     val hostedEventOpt: Observable[HostedEvent] = hostsService
       .findLatest(host.id.toString, msg.textChannel.id.toString)
