@@ -8,7 +8,7 @@ case class BossRosterDto(party1Raiders: List[RaiderDto], party2Raiders: List[Rai
   def hasRaiders: Boolean = party1Raiders.nonEmpty || party2Raiders.nonEmpty
 
   def jobs: List[JobDto] = Jobs.branches
-    .map(branch => JobDto(branch, (party1Raiders ++ party2Raiders).count(r => r.job.branch equals branch)))
+    .map(branch => JobDto(branch, (party1Raiders ++ party2Raiders).count(r => branch equals r.job.branch)))
     .filter(job => job.count > 0)
     .sortBy(-_.count)
 
