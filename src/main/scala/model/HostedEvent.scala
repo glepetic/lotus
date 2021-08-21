@@ -40,7 +40,7 @@ case class HostedEvent(messageId: String,
     "- React with <:redx:871199776572588112> to be removed from the roster" + "\n" + "\n" +
     Markdown.bold("Host Options") + "\n" +
     "- React with \uD83D\uDC4C to finalise the roster" + "\n" +
-    s"- Use command ${Markdown.hightlight(BotEnvironment.prefix + "ha [names/mentions]")} to add other people to the roster. Example: ${Markdown.hightlight(BotEnvironment.prefix + "ha ahri @Gon @Franco alex")}" + "\n" +
+    s"- Use command ${Markdown.hightlight(BotEnvironment.prefix + "ha [names/mentions]")} to add other people to the roster. Please consider that names/mentions must be separated by ${Markdown.hightlight("++")} Example: ${Markdown.hightlight(BotEnvironment.prefix + "ha Ahri - BM/NL ++ @Gon ++ ghost")}" + "\n" +
     s"- Use command ${Markdown.hightlight(BotEnvironment.prefix + "hk [numbers in roster]")} to remove people from the roster. Example: ${Markdown.hightlight(BotEnvironment.prefix + "hk 1 3")}" + "\n" +
     s"- Use command ${Markdown.hightlight(BotEnvironment.prefix + "hdm [new description]")} to modify the description of the event." + "\n" +
     s"- Use command ${Markdown.hightlight(BotEnvironment.prefix + "hf")} to end the event and close registrations." + "\n" +
