@@ -21,7 +21,7 @@ class HostPromote extends MyCommand {
 
     Option(arguments)
       .map(arg => arg.join.trim)
-      .filter(promotedUserMention => promotedUserMention.matches("<@![0-9]+>"))
+      .filter(promotedUserMention => promotedUserMention.matches("<@!?[0-9]+>"))
       .map(_.filter(Character.isDigit))
       .foreach(promotedUserId => {
         val host: User = msg.user
