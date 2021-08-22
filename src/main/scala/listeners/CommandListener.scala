@@ -37,6 +37,7 @@ class CommandListener(requests: Requests) extends CommandController(requests) {
   private val hostFinalise: MyCommand = new HostFinalise
   private val hostRepeat: MyCommand = new HostRepeat
   private val hostMention: MyCommand = new HostMention
+  private val hostPromote: MyCommand = new HostPromote
   private val hostQuit: MyCommand = new HostQuit
 
   val enabledNamedCommands: List[NamedCommand[_]] = this.getEnabledNamedCommands
@@ -44,7 +45,7 @@ class CommandListener(requests: Requests) extends CommandController(requests) {
   private def getEnabledNamedCommands: List[NamedCommand[_]] = {
     val basicEnabledCommands = List(meme)
     val timeEnabledCommands = List(now, timezones, servertime)
-    val hostCommands = List(host, hostAdd, hostKick, hostDescriptionModify, hostFinalise, hostRepeat, hostMention, hostQuit)
+    val hostCommands = List(host, hostAdd, hostKick, hostDescriptionModify, hostFinalise, hostRepeat, hostMention, hostPromote, hostQuit)
     val storymapleEnabledCommands = List(rank, rankNumber, guild, whodrops, whatdropsfrom, bossroster)
     val allEnabledCommands = basicEnabledCommands ++ timeEnabledCommands ++ hostCommands ++ storymapleEnabledCommands
     allEnabledCommands.map(c => this.toNamedCommand(c))

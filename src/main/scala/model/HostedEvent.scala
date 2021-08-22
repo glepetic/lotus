@@ -19,14 +19,20 @@ case class HostedEvent(messageId: String,
                        participants: ListSet[String] = ListSet.empty,
                        finalised: Boolean = false) {
 
-  def asString: String = s"<@$hostId> is hosting an event in channel <#$channelId>.\n\n$descriptionBody\n\n$participantsAsString\n$footerDescription"
+  def asString: String = s"<@$hostId> is hosting an event in channel <#$channelId>.\n\n$descriptionBody\n\n$cohostsAsString\n\n$participantsAsString\n$footerDescription"
 
-  def descriptionBody: String = Markdown.bold("Description") + "\n" + description
+  def descriptionBody: String = Markdown.bold("Description") + "\n" + Option(description).getOrElse("None")
+
+  def cohostsAsString: String = Markdown.bold(s"Cohosts (${cohosts.size})") + "\n" +
+    Option(cohostsAsMentions)
+      .filter(ch => ch.nonEmpty)
+      .map(_.joinWords)
+      .getOrElse("None\n")
 
   def participantsAsString: String = Markdown.bold(s"Roster (${participants.size})") + "\n" +
     Option(participants.zipWithIndex)
-      .filter(mts => mts.nonEmpty)
-      .map(mts => mts.map { case (mention, index) => s"${index + 1}. $mention" })
+      .filter(p => p.nonEmpty)
+      .map(p => p.map { case (mention, index) => s"${index + 1}. $mention" })
       .map(_.joinLines)
       .getOrElse("None\n")
 
@@ -40,13 +46,18 @@ case class HostedEvent(messageId: String,
     "- React with <:redx:871199776572588112> to be removed from the roster" + "\n" + "\n" +
     Markdown.bold("Host Options") + "\n" +
     "- React with \uD83D\uDC4C to finalise the roster" + "\n" +
-    s"- Use command ${Markdown.hightlight(BotEnvironment.prefix + "ha [names/mentions]")} to add other people to the roster. Please consider that names/mentions must be separated by ${Markdown.hightlight("++")} Example: ${Markdown.hightlight(BotEnvironment.prefix + "ha Ahri - BM/NL ++ @Gon ++ ghost")}" + "\n" +
-    s"- Use command ${Markdown.hightlight(BotEnvironment.prefix + "hk [numbers in roster]")} to remove people from the roster. Example: ${Markdown.hightlight(BotEnvironment.prefix + "hk 1 3")}" + "\n" +
+    s"- Use command ${Markdown.hightlight(BotEnvironment.prefix + "ha [names/mentions]")} to add other people to the roster." + "\n" +
+    s"- Use command ${Markdown.hightlight(BotEnvironment.prefix + "hk [numbers in roster]")} to remove people from the roster." + "\n" +
     s"- Use command ${Markdown.hightlight(BotEnvironment.prefix + "hdm [new description]")} to modify the description of the event." + "\n" +
-    s"- Use command ${Markdown.hightlight(BotEnvironment.prefix + "hf")} to end the event and close registrations." + "\n" +
-    s"- Use command ${Markdown.hightlight(BotEnvironment.prefix + "hr")} to repeat the event message in the channel." + "\n" + "\n" +
+    s"- Use command ${Markdown.hightlight(BotEnvironment.prefix + "hp [user mention]")} to promote a user to cohost this event." + "\n" +
+    s"- Use command ${Markdown.hightlight(BotEnvironment.prefix + "hq")} to quit as host of this event." + "\n" +
+    s"- Use command ${Markdown.hightlight(BotEnvironment.prefix + "hr")} to repeat the event message in the channel." + "\n" +
+    s"- Use command ${Markdown.hightlight(BotEnvironment.prefix + "hf")} to end the event and close registrations." + "\n" + "\n" +
     "--"
 
+
+  def cohostsAsMentions: ListSet[String] = this.cohosts.map(asMention)
+  def asMention(id: String): String = s"<@!$id>"
   def mentions: String = this.participants.filter(_.matches("<@![0-9]+>")).joinWords
 
   def isLonelyHost: Boolean = (this.cohosts.size + 1) equals 1
