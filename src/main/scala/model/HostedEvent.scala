@@ -27,7 +27,7 @@ case class HostedEvent(messageId: String,
     Option(cohostsAsMentions)
       .filter(ch => ch.nonEmpty)
       .map(_.joinWords)
-      .getOrElse("None\n")
+      .getOrElse("None")
 
   def participantsAsString: String = Markdown.bold(s"Roster (${participants.size})") + "\n" +
     Option(participants.zipWithIndex)
