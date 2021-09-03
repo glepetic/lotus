@@ -17,6 +17,7 @@ object ClientInitializer {
     client.registerListener(myListeners.onReady)
     client.registerListener(myListeners.onReaction)
     client.registerListener(myListeners.onMessageDelete)
+    client.registerListener(myListeners.onMessageSent)
   }
 
   private def addCommandListener(client: DiscordClient): Unit = {

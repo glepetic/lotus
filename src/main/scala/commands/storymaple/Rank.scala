@@ -15,6 +15,7 @@ class Rank extends MyCommand {
   override def aliases: Seq[String] = Seq("r","rank")
 
   override def execute(msg: UserCommandMessage[_], arguments: List[String]): Request[_] = {
+
     val rankingsService = new RankingsService()
 
     val parsedIgn = arguments.join.trim
