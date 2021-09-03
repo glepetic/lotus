@@ -2,7 +2,7 @@ package org.maple
 package listeners
 
 import commands.MyCommand
-import commands.basic.Meme
+import commands.basic.{Help, Meme}
 import commands.host._
 import commands.storymaple._
 import commands.time.{Now, ServerTime, Timezones}
@@ -17,6 +17,7 @@ class CommandListener(requests: Requests) extends CommandController(requests) {
 
   // basic commands
 
+  private val help: MyCommand = new Help
   private val meme: MyCommand = new Meme
   // time commands
   private val now: MyCommand = new Now
@@ -43,7 +44,7 @@ class CommandListener(requests: Requests) extends CommandController(requests) {
   val enabledNamedCommands: List[NamedCommand[_]] = this.getEnabledNamedCommands
 
   private def getEnabledNamedCommands: List[NamedCommand[_]] = {
-    val basicEnabledCommands = List(meme)
+    val basicEnabledCommands = List(help, meme)
     val timeEnabledCommands = List(now, timezones, servertime)
     val hostCommands = List(host, hostAdd, hostKick, hostDescriptionModify, hostFinalise, hostRepeat, hostMention, hostPromote, hostQuit)
     val storymapleEnabledCommands = List(rank, rankNumber, guild, whodrops, whatdropsfrom, bossroster)

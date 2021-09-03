@@ -22,7 +22,7 @@ class EmbedBuilder(private val title: Option[String],
 
   def title(t: String): EmbedBuilder = new EmbedBuilder(Option(t), description, url, timestamp, color, footer, image, video, thumbnail, author, fields)
   def description(d: String): EmbedBuilder = new EmbedBuilder(title, Option(d), url, timestamp, color, footer, image, video, thumbnail, author, fields)
-  def url(u: String): EmbedBuilder = new EmbedBuilder(title, description, Option(u), timestamp, color, footer, image, video, thumbnail, author, fields)
+  def url(u: Option[String]): EmbedBuilder = new EmbedBuilder(title, description, u, timestamp, color, footer, image, video, thumbnail, author, fields)
   def timestamp(t: OffsetDateTime): EmbedBuilder = new EmbedBuilder(title, description, url, Option(t), color, footer, image, video, thumbnail, author, fields)
   def defaultColor: EmbedBuilder = this.color("yellow")
   def defaultErrorColor: EmbedBuilder = this.color("red")

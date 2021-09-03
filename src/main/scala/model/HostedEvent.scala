@@ -21,7 +21,7 @@ case class HostedEvent(messageId: String,
 
   def asString: String = s"<@$hostId> is hosting an event in channel <#$channelId>.\n\n$descriptionBody\n\n$cohostsAsString\n\n$participantsAsString\n$footerDescription"
 
-  def descriptionBody: String = Markdown.bold("Description") + "\n" + Option(description).getOrElse("None")
+  def descriptionBody: String = Markdown.bold("Description") + "\n" + Option(description).filter(_.nonEmpty).getOrElse("None")
 
   def cohostsAsString: String = Markdown.bold(s"Cohosts (${cohosts.size})") + "\n" +
     Option(cohostsAsMentions)
@@ -43,16 +43,8 @@ case class HostedEvent(messageId: String,
 
   def runOptions: String = Markdown.bold("Options") + "\n" +
     "- React with <:greencheck:871199809493671978> to be added to the roster" + "\n" +
-    "- React with <:redx:871199776572588112> to be removed from the roster" + "\n" + "\n" +
-    Markdown.bold("Host Options") + "\n" +
-    "- React with \uD83D\uDC4C to finalise the roster" + "\n" +
-    s"- Use command ${Markdown.hightlight(BotEnvironment.prefix + "ha [names/mentions]")} to add other people to the roster." + "\n" +
-    s"- Use command ${Markdown.hightlight(BotEnvironment.prefix + "hk [numbers in roster]")} to remove people from the roster." + "\n" +
-    s"- Use command ${Markdown.hightlight(BotEnvironment.prefix + "hdm [new description]")} to modify the description of the event." + "\n" +
-    s"- Use command ${Markdown.hightlight(BotEnvironment.prefix + "hp [user mention]")} to promote a user to cohost this event." + "\n" +
-    s"- Use command ${Markdown.hightlight(BotEnvironment.prefix + "hq")} to quit as host of this event." + "\n" +
-    s"- Use command ${Markdown.hightlight(BotEnvironment.prefix + "hr")} to repeat the event message in the channel." + "\n" +
-    s"- Use command ${Markdown.hightlight(BotEnvironment.prefix + "hf")} to end the event and close registrations." + "\n" + "\n" +
+    "- React with <:redx:871199776572588112> to be removed from the roster" + "\n" +
+    s"- React with \uD83D\uDC4C to finalise the roster - ONLY HOST" + "\n" + "\n" +
     "--"
 
 
