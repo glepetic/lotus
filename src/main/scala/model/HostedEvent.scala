@@ -50,7 +50,7 @@ case class HostedEvent(messageId: String,
 
   def cohostsAsMentions: ListSet[String] = this.cohosts.map(asMention)
   def asMention(id: String): String = s"<@!$id>"
-  def mentions: String = this.participants.filter(_.matches("<@![0-9]+>")).joinWords
+  def mentions: String = this.participants.filter(_.matches("<@!?[0-9]+>")).joinWords
 
   def isLonelyHost: Boolean = (this.cohosts.size + 1) equals 1
 
