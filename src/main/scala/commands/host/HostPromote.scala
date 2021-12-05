@@ -44,8 +44,13 @@ class HostPromote extends MyCommand {
                   .getOrElse(() => {
                     hostsService.replace(he)
                     BotEnvironment.client.foreach(client => client.requestsHelper.run(EditMessage(TextChannelId(he.channelId), MessageId(he.messageId), EditMessageData(JsonOption.fromOptionWithNull(Option(he.asString)))))(msg.cache))
+                    /*
+                    CODE FOR SUCCESS DM
+                    **
                     BotEnvironment.client.foreach(client => client.requestsHelper.run(CreateDm(CreateDMData(host.id)))(msg.cache)
                       .foreach(createdDm => client.requestsHelper.run(CreateMessage(TextChannelId(createdDm.id), CreateMessageData("Done!")))(msg.cache))(client.executionContext))
+                    **
+                     */
                   })
                   .apply()
               case Failure(err) => println(err)
