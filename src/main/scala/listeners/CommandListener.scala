@@ -30,6 +30,7 @@ class CommandListener(requests: Requests) extends CommandController(requests) {
   private val whodrops: MyCommand = new WhoDrops
   private val whatdropsfrom: MyCommand = new WhatDropsFrom
   private val bossroster: MyCommand = new BossRoster
+  private val rissadk: MyCommand = new RissaDK
   // host commands
   private val host: MyCommand = new Host
   private val hostAdd: MyCommand = new HostAdd
@@ -47,7 +48,7 @@ class CommandListener(requests: Requests) extends CommandController(requests) {
     val basicEnabledCommands = List(help, meme)
     val timeEnabledCommands = List(now, timezones, servertime)
     val hostCommands = List(host, hostAdd, hostKick, hostDescriptionModify, hostFinalise, hostRepeat, hostMention, hostPromote, hostQuit)
-    val storymapleEnabledCommands = List(rank, rankNumber, guild, whodrops, whatdropsfrom, bossroster)
+    val storymapleEnabledCommands = List(rank, rankNumber, guild, whodrops, whatdropsfrom, bossroster, rissadk)
     val allEnabledCommands = basicEnabledCommands ++ timeEnabledCommands ++ hostCommands ++ storymapleEnabledCommands
     allEnabledCommands.map(c => this.toNamedCommand(c))
   }
