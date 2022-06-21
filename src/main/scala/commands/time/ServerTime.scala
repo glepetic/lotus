@@ -11,7 +11,7 @@ class ServerTime extends MyCommand {
   override def aliases: Seq[String] = Seq("servertime", "st")
 
   override def execute(msg: UserCommandMessage[_], arguments: List[String]): Request[_] = arguments match {
-    case Nil => new Now().execute(msg, List("CST/CDT"))
+    case Nil => new Now().execute(msg, List("UTC"))
     case _ => msg.textChannel.sendMessage("Server time command does not take parameters!")
   }
 }
