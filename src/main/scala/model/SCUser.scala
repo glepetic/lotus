@@ -2,7 +2,7 @@ package org.maple
 package model
 
 import java.time.temporal.ChronoUnit
-import java.time.{Instant, LocalDateTime, ZoneId}
+import java.time.{Instant, ZoneId}
 import java.util.UUID
 
 case class SCUser(userId: String,
@@ -15,11 +15,13 @@ case class SCUser(userId: String,
 
   def canDoLilynouch: Boolean = {
     val lastRolled = Option(lastRoll).map(_.atZone(ZoneId.systemDefault()))
-    println(s"Last Roll: $lastRolled")
     val now = Instant.now().atZone(ZoneId.systemDefault())
+    val result = lastRolled.forall(lR => (lR.getDayOfMonth < now.getDayOfMonth || ChronoUnit.DAYS.between(lR, now) > 1) && lR.isBefore(now))
+    println(s"Last Roll: ${lastRolled.get}")
     println(s"Now: $now")
-    println(s"(${lastRolled.get.getDayOfMonth} < ${now.getDayOfMonth} || ${ChronoUnit.DAYS.between(lastRolled.get, now)}) && ${lastRolled.get.isBefore(now)}")
-    lastRolled.forall(lR => (lR.getDayOfMonth < now.getDayOfMonth || ChronoUnit.DAYS.between(lR, now) > 1) && lR.isBefore(now))
+    println(s"(${lastRolled.get.getDayOfMonth} < ${now.getDayOfMonth} || ${ChronoUnit.DAYS.between(lastRolled.get, now)} > 1) && ${lastRolled.get.isBefore(now)}")
+    println(s"Result: $result")
+    result
   }
 
   def scIncreaser: SCUser = SCUser(userId, serverId, lastRoll = Instant.now(), scCount + 1, donutCount, scrollCount, id)

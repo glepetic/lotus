@@ -29,11 +29,11 @@ class SCService {
       .filter(_.canDoLilynouch)
       .map(scUser => {
         val afterLily = this.fightLilynouch(scUser)
+        val document = mapper.to(afterLily.scUser)
         Option(scUser.lastRoll)
           .map(_ => usr => repository.replace(usr))
           .getOrElse(usr => repository.insert(usr))
-          .apply(mapper.to(afterLily.scUser))
-        repository.insert(mapper.to(afterLily.scUser))
+          .apply(document)
         afterLily.drop
       })
   }
