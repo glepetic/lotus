@@ -29,7 +29,10 @@ class SCService {
       .filter(_.canDoLilynouch)
       .map(scUser => {
         val afterLily = this.fightLilynouch(scUser)
-        repository.replace(mapper.to(afterLily.scUser))
+        Option(scUser.lastRoll)
+          .map(_ => usr => repository.replace(usr))
+          .getOrElse(repository.insert)
+          .apply(mapper.to(afterLily.scUser))
         repository.insert(mapper.to(afterLily.scUser))
         afterLily.drop
       })
