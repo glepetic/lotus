@@ -30,10 +30,10 @@ class SCService {
       .map(scUser => {
         val afterLily = this.fightLilynouch(scUser)
         val document = mapper.to(afterLily.scUser)
-        Option(scUser.lastRoll)
-          .map(_ => usr => repository.replace(usr))
-          .getOrElse(usr => repository.insert(usr))
-          .apply(document)
+//        Option(scUser.lastRoll)
+//          .map(_ => usr => repository.replace(usr))
+//          .getOrElse(usr => repository.insert(usr))
+//          .apply(document)
         afterLily.drop
       })
   }

@@ -12,7 +12,7 @@ class SCUserMapper {
 
   def to(d: Document): SCUser = SCUser(
     d.getString("userId"),
-    d.getString("severId"),
+    d.getString("serverId"),
     Instant.ofEpochMilli(d.getLong("lastRoll")),
     d.getInteger("scCount"),
     d.getInteger("donutCount"),
@@ -20,7 +20,7 @@ class SCUserMapper {
     d.getString("id")
   )
 
-  def to(he: SCUser): Document = Document.parse(this.toJsValue(he).prettyPrint)
+  def to(usr: SCUser): Document = Document.parse(this.toJsValue(usr).prettyPrint)
 
   private def toJsValue(scUser: SCUser): JsValue = JsObject(
     "userId" -> JsString(scUser.userId),
