@@ -5,8 +5,9 @@ import commands.MyCommand
 import services.SCService
 
 import ackcord.commands.UserCommandMessage
-import ackcord.requests.{CreateMessage, CreateMessageData, DeleteMessage, Request}
+import ackcord.requests.{CreateMessage, CreateMessageData, CreateReaction, DeleteMessage, Request}
 import org.maple.config.BotEnvironment
+import org.maple.model.Drop
 import org.maple.utils.OptionUtils.OptionImprovements
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -19,11 +20,16 @@ class Lilynouch extends MyCommand {
     val scService: SCService = SCService.getInstance
 
     scService.fightLilynouch(msg.user.id.toString, msg.message.guild(msg.cache).orThrow.id.toString)
-      .foreach(dropType => {
-        BotEnvironment.client.foreach(client => client.requestsHelper.run(CreateMessage(msg.textChannel.id, CreateMessageData(dropType.value)))(msg.cache))
+      .map {
+        case Drop.DONUT => "<:donut:1026233067385397248>"
+        case Drop.SUNCRYSTAL => "<:suncrystal:1026233773832032331>"
+        case Drop.SCROLL => "<:10scroll:1026233940547207278>"
+      }
+      .foreach(emoji => {
+        BotEnvironment.client.foreach(client => client.requestsHelper.run(CreateMessage(msg.textChannel.id, CreateMessageData(emoji)))(msg.cache))
       })
 
-    DeleteMessage(msg.textChannel.id, msg.message.id)
+    CreateReaction(msg.message.channelId, msg.message.id, "greencheck:871199809493671978")
   }
 
 }

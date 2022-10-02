@@ -6,9 +6,6 @@ import model.{Drop, DropType, LilynouchResult, SCUser}
 import repositories.SCUsersRepository
 import utils.OptionUtils.OptionImprovements
 
-import org.mongodb.scala.Observable
-
-import scala.collection.convert.ImplicitConversions.`map AsScala`
 import scala.collection.immutable.HashMap
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
