@@ -12,7 +12,7 @@ import ackcord.util.JsonOption
 import org.maple.model.HostedEvent
 import org.mongodb.scala.Observable
 
-class HostFinalise extends MyCommand{
+class HostFinalise extends MyCommand {
   override def aliases: Seq[String] = Seq("hf", "hostfinalise")
 
   override def execute(msg: UserCommandMessage[_], arguments: List[String]): Request[_] = {
@@ -29,6 +29,7 @@ class HostFinalise extends MyCommand{
       val message = MessageId(he.messageId)
       hostsService.replace(he)
       BotEnvironment.client.foreach(client => {
+//        client.requestsHelper.run(CreateMessage(msg.textChannel.id, CreateMessageData(he.mentions + "\n\n" + "The hosted event has been finalised by " + host.mention)))(msg.cache)
         client.requestsHelper.run(EditMessage(channel, message, EditMessageData(JsonOption.fromOptionWithNull(Option(he.asString)))))(msg.cache)
         client.requestsHelper.run(DeleteAllReactions(channel, message))(msg.cache)
       })

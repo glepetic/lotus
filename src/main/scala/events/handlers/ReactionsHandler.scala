@@ -2,16 +2,17 @@ package org.maple
 package events.handlers
 
 import config.BotEnvironment
+import model.HostedEvent
 import services.EventHostsService
 
-import ackcord.data.{MessageId, TextChannelId}
-import ackcord.requests.{DeleteAllReactions, DeleteUserReaction, EditMessage, EditMessageData}
+import ackcord.data.{MessageId, TextChannelId, ThreadGuildChannelId}
+import ackcord.requests._
 import ackcord.util.JsonOption
 import ackcord.{APIMessage, EventListenerMessage}
-import org.maple.model.HostedEvent
 import org.mongodb.scala.Observable
 
 import scala.collection.immutable.ListSet
+import scala.language.postfixOps
 
 object ReactionsHandler {
 
@@ -40,6 +41,15 @@ object ReactionsHandler {
       )
       .getOrElse((he: HostedEvent, _: String) => he)
 
+    val threadActionOpt = (evt.emoji.id, evt.user) match {
+      case (id, Some(user)) => id
+        .filter(id => id.toString equals "871199809493671978")
+        .map(_ => (threadId: String) => AddThreadMember(ThreadGuildChannelId(threadId), user.id))
+        .orElse(id
+          .filter(id => id.toString equals "871199776572588112")
+          .map(_ => (threadId: String) => RemoveThreadMember(ThreadGuildChannelId(threadId), user.id)))
+    }
+
     val hostsService: EventHostsService = EventHostsService.getInstance
     val hostedEventOpt: Observable[HostedEvent] = hostsService
       .find(evt.messageId.toString)
@@ -55,6 +65,7 @@ object ReactionsHandler {
         .map(_ => DeleteAllReactions(channelId, messageId))
         .getOrElse(DeleteUserReaction(channelId, messageId, emoji, evt.userId))
       BotEnvironment.client.foreach(client => {
+        threadActionOpt.foreach(threadAction => client.requestsHelper.run(threadAction.apply(he.threadId))(cache))
         client.requestsHelper.run(EditMessage(channelId, messageId, EditMessageData(JsonOption.fromOptionWithNull(hostedEventAsString))))(cache)
         client.requestsHelper.run(request)(cache)
       })

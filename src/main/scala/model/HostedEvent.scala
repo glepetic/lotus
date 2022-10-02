@@ -13,6 +13,7 @@ case class HostedEvent(messageId: String,
                        timestamp: Instant,
                        hostId: String,
                        channelId: String,
+                       threadId: String,
                        description: String,
                        id: String = UUID.randomUUID().toString,
                        cohosts: ListSet[String] = ListSet.empty,
@@ -62,17 +63,19 @@ case class HostedEvent(messageId: String,
 
   private def withoutCohost(id: String) = this.withCohosts(this.cohosts.filterNot(_.equalsIgnoreCase(id)))
 
-  def withHost(hostId: String): HostedEvent = HostedEvent(this.messageId, this.timestamp, hostId, this.channelId, this.description, this.id, this.cohosts, this.participants, this.finalised)
+  def withHost(hostId: String): HostedEvent = HostedEvent(this.messageId, this.timestamp, hostId, this.channelId, this.threadId, this.description, this.id, this.cohosts, this.participants, this.finalised)
 
-  def withCohosts(newCohosts: ListSet[String]): HostedEvent = HostedEvent(this.messageId, this.timestamp, this.hostId, this.channelId, this.description, this.id, newCohosts, this.participants, this.finalised)
+  def withCohosts(newCohosts: ListSet[String]): HostedEvent = HostedEvent(this.messageId, this.timestamp, this.hostId, this.channelId, this.threadId, this.description, this.id, newCohosts, this.participants, this.finalised)
 
-  def withDescription(newDescription: String): HostedEvent = HostedEvent(this.messageId, this.timestamp, this.hostId, this.channelId, newDescription, this.id, this.cohosts, this.participants, this.finalised)
+  def withDescription(newDescription: String): HostedEvent = HostedEvent(this.messageId, this.timestamp, this.hostId, this.channelId, this.threadId, newDescription, this.id, this.cohosts, this.participants, this.finalised)
 
-  def withMessageId(newMessageId: String): HostedEvent = HostedEvent(newMessageId, this.timestamp, this.hostId, this.channelId, this.description, this.id, this.cohosts, this.participants, this.finalised)
+  def withMessageId(newMessageId: String): HostedEvent = HostedEvent(newMessageId, this.timestamp, this.hostId, this.channelId, this.threadId, this.description, this.id, this.cohosts, this.participants, this.finalised)
 
-  def withParticipants(newParticipants: ListSet[String]): HostedEvent = HostedEvent(this.messageId, this.timestamp, this.hostId, this.channelId, this.description, this.id, this.cohosts, newParticipants, this.finalised)
+  def withThreadId(newThreadId: String): HostedEvent = HostedEvent(this.messageId, this.timestamp, this.hostId, this.channelId, newThreadId, this.description, this.id, this.cohosts, this.participants, this.finalised)
 
-  def withFinalised(isFinalised: Boolean): HostedEvent = HostedEvent(this.messageId, this.timestamp, this.hostId, this.channelId, this.description, this.id, this.cohosts, this.participants, isFinalised)
+  def withParticipants(newParticipants: ListSet[String]): HostedEvent = HostedEvent(this.messageId, this.timestamp, this.hostId, this.channelId, this.threadId, this.description, this.id, this.cohosts, newParticipants, this.finalised)
+
+  def withFinalised(isFinalised: Boolean): HostedEvent = HostedEvent(this.messageId, this.timestamp, this.hostId, this.channelId, this.threadId, this.description, this.id, this.cohosts, this.participants, isFinalised)
 
   def finalise: HostedEvent = this.withFinalised(true)
 }

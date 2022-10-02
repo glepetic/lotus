@@ -7,8 +7,8 @@ import services.EventHostsService
 import utils.IterableUtils.IterableImprovements
 
 import ackcord.commands.UserCommandMessage
-import ackcord.data.{MessageId, User}
-import ackcord.requests.{CreateMessage, CreateMessageData, CreateReaction, DeleteMessage, Request}
+import ackcord.data.{MessageId, TextGuildChannelId, User}
+import ackcord.requests.{CreateMessage, CreateMessageData, CreateReaction, DeleteMessage, Request, StartThreadWithMessage, StartThreadWithMessageData}
 import ackcord.syntax.TextChannelSyntax
 import org.maple.model
 import org.maple.model.HostedEvent
@@ -22,7 +22,7 @@ class Host extends MyCommand {
   override def execute(msg: UserCommandMessage[_], arguments: List[String]): Request[_] = {
     val host: User = msg.user
     val description: String = arguments.joinWords.trim
-    val hostedEvent: HostedEvent = model.HostedEvent(msg.message.id.toString, Instant.now, host.id.toString, msg.textChannel.id.toString, description)
+    val hostedEvent: HostedEvent = HostedEvent(msg.message.id.toString, Instant.now, host.id.toString, msg.textChannel.id.toString, null, description)
     val hostsService: EventHostsService = EventHostsService.getInstance
 
     implicit val ec: scala.concurrent.ExecutionContext = scala.concurrent.ExecutionContext.global
@@ -36,13 +36,15 @@ class Host extends MyCommand {
             CreateMessage(msg.textChannel.id,
               CreateMessageData("You are already hosting or cohosting a run on this channel. Either resign as a host or end your previous event before hosting a new one!", replyTo = Option(MessageId(he.messageId)))))(msg.cache)))
         .getOrElse(() => BotEnvironment.client.foreach(client => client.requestsHelper.run(msg.textChannel.sendMessage(hostedEvent.asString))(msg.cache)
-          .foreach(sentMsg => {
-            hostsService.insert(model.HostedEvent(sentMsg.id.toString, Instant.now, host.id.toString, sentMsg.channelId.toString, description))
-            client.requestsHelper.run(CreateReaction(sentMsg.channelId, sentMsg.id, "greencheck:871199809493671978"))(msg.cache)
-              .foreach(_ => client.requestsHelper.run(CreateReaction(sentMsg.channelId, sentMsg.id, "redx:871199776572588112"))(msg.cache)
-                .foreach(_ => client.requestsHelper.run(CreateReaction(sentMsg.channelId, sentMsg.id, "\uD83D\uDC4C"))(msg.cache))(client.executionContext)
-              )(client.executionContext)
-          })(client.executionContext)))
+          .foreach(sentMsg =>
+            client.requestsHelper.run(StartThreadWithMessage(TextGuildChannelId(sentMsg.channelId), sentMsg.id, StartThreadWithMessageData("Hosted event by " + host.username, 1440)))(msg.cache)
+              .foreach(thread => {
+                hostsService.insert(hostedEvent.withMessageId(sentMsg.id.toString).withThreadId(thread.id.toString))
+                client.requestsHelper.run(CreateReaction(sentMsg.channelId, sentMsg.id, "greencheck:871199809493671978"))(msg.cache)
+                  .foreach(_ => client.requestsHelper.run(CreateReaction(sentMsg.channelId, sentMsg.id, "redx:871199776572588112"))(msg.cache)
+                    .foreach(_ => client.requestsHelper.run(CreateReaction(sentMsg.channelId, sentMsg.id, "\uD83D\uDC4C"))(msg.cache))(client.executionContext)
+                  )(client.executionContext)
+              })(client.executionContext))))
         .apply()
       case Failure(e) => throw e
     }
