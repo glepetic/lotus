@@ -18,7 +18,6 @@ class SCUsersRepository extends MongoRepository {
 
   def find(discordUserId: String, discordServerId: String): Future[Option[Document]] = this.collection
     .find(and(equal("userId", discordUserId), equal("serverId", discordServerId)))
-    .sort(descending("lastRoll"))
     .first()
     .toFutureOption()
   def insert(d: Document): Unit = this.collection
