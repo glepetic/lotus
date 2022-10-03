@@ -21,13 +21,13 @@ class SCService {
     Drop.DONUT -> ((scUser:SCUser) => scUser.donutIncreaser)
   )
 
+  def findScUser(userId: String, serverId: String): Future[SCUser] = repository
+    .find(userId, serverId)
+    .map(opt => opt.map(mapper.to)
+        .getOrElse(newSCUser(userId, serverId)))
+
   def fightLilynouch(userId: String, serverId: String): Future[DropType] = {
-    repository.find(userId, serverId)
-      .map(opt => {
-        opt.map(mapper.to)
-          .getOrElse(newSCUser(userId, serverId))
-      }
-      )
+    this.findScUser(userId, serverId)
       .filter(_.canDoLilynouch)
       .map(scUser => {
         val afterLily = this.fightLilynouch(scUser)
