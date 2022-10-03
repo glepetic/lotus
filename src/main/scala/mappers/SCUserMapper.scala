@@ -14,9 +14,9 @@ class SCUserMapper {
     d.getString("userId"),
     d.getString("serverId"),
     Instant.ofEpochMilli(d.getLong("lastRoll")),
-    d.getInteger("scCount"),
-    d.getInteger("donutCount"),
-    d.getInteger("scrollCount"),
+    d.getLong("scCount"),
+    d.getLong("donutCount"),
+    d.getLong("scrollCount"),
     d.getString("id")
   )
 

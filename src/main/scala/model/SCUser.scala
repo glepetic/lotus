@@ -9,9 +9,9 @@ import scala.math.BigDecimal.RoundingMode
 case class SCUser(userId: String,
                   serverId: String,
                   lastRoll: Instant,
-                  scCount: Int,
-                  donutCount: Int,
-                  scrollCount: Int,
+                  scCount: Long,
+                  donutCount: Long,
+                  scrollCount: Long,
                   id: String = UUID.randomUUID().toString) {
 
   def canDoLilynouch: Boolean = {
@@ -21,19 +21,19 @@ case class SCUser(userId: String,
     result
   }
 
-  def totalKills: Int = scCount + donutCount + scrollCount
+  def totalKills: Long = scCount + donutCount + scrollCount
 
   def sunCrystalRate: BigDecimal = BigDecimal(scCount*100.00/totalKills).setScale(2, RoundingMode.HALF_UP)
   def scrollRate: BigDecimal = BigDecimal(scrollCount*100.00/totalKills).setScale(2, RoundingMode.HALF_UP)
   def donutRate: BigDecimal = BigDecimal(donutCount*100.00/totalKills).setScale(2, RoundingMode.HALF_UP)
 
-  private def expectedSuncrystals: Int = totalKills/6
-  private def expectedScrolls: Int = totalKills*247/300
-  private def expectedDonuts: Int = totalKills/100
+  private def expectedSuncrystals: Double = totalKills/6
+  private def expectedScrolls: Double = (totalKills*247)/300
+  private def expectedDonuts: Double = totalKills/100
 
-  def suncrystalOffset: BigDecimal = BigDecimal((100 - (scCount*100.00)/expectedSuncrystals) * -1).setScale(2, RoundingMode.FLOOR)
-  def scrollsOffset: BigDecimal = BigDecimal((100 - (scrollCount*100.00)/expectedScrolls) * -1).setScale(2, RoundingMode.FLOOR)
-  def donutsOffset: BigDecimal = BigDecimal((100 - (donutCount*100.00)/expectedDonuts) * -1).setScale(2, RoundingMode.FLOOR)
+  def suncrystalOffset: Double = ((scCount-expectedSuncrystals)*100.00)/expectedSuncrystals
+  def scrollsOffset: Double =  ((scCount-expectedScrolls)*100.00)/expectedScrolls
+  def donutsOffset: Double =  ((donutCount-expectedDonuts)*100.00)/expectedDonuts
 
   def scIncreaser: SCUser = SCUser(userId, serverId, lastRoll = Instant.now(), scCount + 1, donutCount, scrollCount, id)
   def donutIncreaser: SCUser = SCUser(userId, serverId, lastRoll = Instant.now(), scCount, donutCount + 1, scrollCount, id)
