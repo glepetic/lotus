@@ -19,16 +19,17 @@ class Lilynouch extends MyCommand {
 
     val scService: SCService = SCService.getInstance
 
-    val userId = msg.user.id.toString
+    val user = msg.user
+    val userId = user.id.toString
     val result = msg
       .message
       .guild(msg.cache)
       .map(guild => {
         val lilyFightResult = scService.fightLilynouch(userId, guild.id.toString)
           .map {
-            case Drop.DONUT => "<:donut:1026233025236828180>"
-            case Drop.SUNCRYSTAL => "<:suncrystal:1026148453954371664>"
-            case Drop.SCROLL => "<:10scroll:1026232443449126962>"
+            case Drop.DONUT => s"${user.mentionNick} <:donut:1026233025236828180> Oh you are doing lily? Server reset time :doughnut:"
+            case Drop.SUNCRYSTAL => s"${user.mentionNick} <:suncrystal:1026148453954371664> I have received a crafting material from Lilynouch!"
+            case Drop.SCROLL => s"${user.mentionNick} <:10scroll:1026232443449126962> Who cares amirite?"
           }
           .fallbackTo(Future("You have already done Lily recently!"))
 
