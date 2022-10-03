@@ -17,9 +17,9 @@ class SCUserMapper {
     d.getString("userId"),
     d.getString("serverId"),
     LocalDate.parse(d.getString("lastRoll"), dateFormatter),
-    d.getLong("scCount"),
-    d.getLong("donutCount"),
-    d.getLong("scrollCount"),
+    d.getInteger("scCount").toLong,
+    d.getInteger("donutCount").toLong,
+    d.getInteger("scrollCount").toLong,
     d.getString("id")
   )
 
