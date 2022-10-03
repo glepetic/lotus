@@ -13,6 +13,7 @@ import org.maple.mappers.EmbedMapper
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, Future}
+import scala.math.BigDecimal.RoundingMode
 
 class SunCrystal extends MyCommand {
   override def aliases: Seq[String] = Seq("sc", "suncrystal")
@@ -33,11 +34,14 @@ class SunCrystal extends MyCommand {
             .defaultEmbedBuilder("Lilynouch Hunt Count", user)
             .withField("Total Kills", s"${scUser.totalKills} :skull:")
             .withField("Sun Crystals", s"${scUser.scCount} <:suncrystal:1026148453954371664>", inline = true)
-            .withField("Rate", s"${scUser.scCount*100.00/scUser.totalKills}%", inline = true)
+            .withField("Rate", s"${scUser.sunCrystalRate}%", inline = true)
+            .withField("Offset", s"${scUser.suncrystalOffset}%", inline = true)
             .withField("Scrolls", s"${scUser.scrollCount} <:10scroll:1026232443449126962>", inline = true)
-            .withField("Rate", s"${scUser.scrollCount*100.00/scUser.totalKills}%", inline = true)
+            .withField("Rate", s"${scUser.scrollRate}%", inline = true)
+            .withField("Offset", s"${scUser.scrollsOffset}%", inline = true)
             .withField("Donut Resets", s"${scUser.donutCount} <:donut:1026233025236828180>", inline = true)
-            .withField("Rate", s"${scUser.donutCount*100.00/scUser.totalKills}%", inline = true)
+            .withField("Rate", s"${scUser.donutRate}%", inline = true)
+            .withField("Offset", s"${scUser.donutsOffset}%", inline = true)
             .build
           )
           .fallbackTo(Future(
