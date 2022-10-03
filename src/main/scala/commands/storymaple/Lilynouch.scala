@@ -19,7 +19,12 @@ class Lilynouch extends MyCommand {
 
     val scService: SCService = SCService.getInstance
 
-    scService.fightLilynouch(msg.user.id.toString, msg.message.guild(msg.cache).orThrow.id.toString)
+    val message = msg.message
+    val userId = msg.user.id.toString
+
+    println("init command")
+
+    scService.fightLilynouch(userId)
       .map {
         case Drop.DONUT => "<:donut:1026233025236828180>"
         case Drop.SUNCRYSTAL => "<:suncrystal:1026148453954371664>"
@@ -29,7 +34,7 @@ class Lilynouch extends MyCommand {
         BotEnvironment.client.foreach(client => client.requestsHelper.run(CreateMessage(msg.textChannel.id, CreateMessageData(emoji)))(msg.cache))
       })
 
-    CreateReaction(msg.message.channelId, msg.message.id, "greencheck:871199809493671978")
+    CreateReaction(message.channelId, message.id, "greencheck:871199809493671978")
   }
 
 }

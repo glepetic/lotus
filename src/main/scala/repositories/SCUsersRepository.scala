@@ -16,8 +16,8 @@ class SCUsersRepository extends MongoRepository {
   override protected def databaseName: String = DBConfig.defaultDB
   override protected def collectionName: String = "scusers"
 
-  def find(discordUserId: String, discordServerId: String): Future[Option[Document]] = this.collection
-    .find(and(equal("userId", discordUserId), equal("serverId", discordServerId)))
+  def find(discordUserId: String): Future[Option[Document]] = this.collection
+    .find(equal("userId", discordUserId))
     .sort(descending("lastRoll"))
     .first()
     .toFutureOption()

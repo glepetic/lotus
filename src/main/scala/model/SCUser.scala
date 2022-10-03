@@ -6,7 +6,6 @@ import java.time.{Instant, ZoneId}
 import java.util.UUID
 
 case class SCUser(userId: String,
-                  serverId: String,
                   lastRoll: Instant,
                   scCount: Int,
                   donutCount: Int,
@@ -24,8 +23,8 @@ case class SCUser(userId: String,
     result
   }
 
-  def scIncreaser: SCUser = SCUser(userId, serverId, lastRoll = Instant.now(), scCount + 1, donutCount, scrollCount, id)
-  def donutIncreaser: SCUser = SCUser(userId, serverId, lastRoll = Instant.now(), scCount, donutCount + 1, scrollCount, id)
-  def scrollIncreaser: SCUser = SCUser(userId, serverId, lastRoll = Instant.now(), scCount, donutCount, scrollCount + 1, id)
+  def scIncreaser: SCUser = SCUser(userId, lastRoll = Instant.now(), scCount + 1, donutCount, scrollCount, id)
+  def donutIncreaser: SCUser = SCUser(userId, lastRoll = Instant.now(), scCount, donutCount + 1, scrollCount, id)
+  def scrollIncreaser: SCUser = SCUser(userId, lastRoll = Instant.now(), scCount, donutCount, scrollCount + 1, id)
 
 }
