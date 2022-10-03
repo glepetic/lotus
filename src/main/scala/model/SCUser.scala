@@ -16,10 +16,6 @@ case class SCUser(userId: String,
     val lastRolled = Option(lastRoll).map(_.atZone(ZoneId.systemDefault()))
     val now = Instant.now().atZone(ZoneId.systemDefault())
     val result = lastRolled.forall(lR => (lR.getDayOfMonth < now.getDayOfMonth || ChronoUnit.DAYS.between(lR, now) > 1) && lR.isBefore(now))
-    println(s"Last Roll: ${lastRolled.get}")
-    println(s"Now: $now")
-    println(s"(${lastRolled.get.getDayOfMonth} < ${now.getDayOfMonth} || ${ChronoUnit.DAYS.between(lastRolled.get, now)} > 1) && ${lastRolled.get.isBefore(now)}")
-    println(s"Result: $result")
     result
   }
 
