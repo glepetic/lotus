@@ -22,9 +22,9 @@ case class SCUser(userId: String,
   def scrollRate: BigDecimal = BigDecimal(scrollCount*100.00/totalKills).setScale(2, RoundingMode.HALF_UP)
   def donutRate: BigDecimal = BigDecimal(donutCount*100.00/totalKills).setScale(2, RoundingMode.HALF_UP)
 
-  private def expectedSuncrystals: Double = totalKills/6
-  private def expectedScrolls: Double = (totalKills*247)/300
-  private def expectedDonuts: Double = totalKills/100
+  def expectedSuncrystals: Double = totalKills/6
+  def expectedScrolls: Double = (totalKills*247)/300
+  def expectedDonuts: Double = totalKills/100
 
   def suncrystalOffset: Double = ((scCount-expectedSuncrystals)*100.00)/expectedSuncrystals
   def scrollsOffset: Double =  ((scCount-expectedScrolls)*100.00)/expectedScrolls

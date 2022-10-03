@@ -25,6 +25,7 @@ class SunCrystal extends MyCommand {
     val embedMapper: EmbedMapper = new EmbedMapper
 
     val decimalFormat: DecimalFormat = new DecimalFormat("#.##")
+    val noDecimalFormat: DecimalFormat = new DecimalFormat("#")
 
     val user = msg.user
     val userId = msg.user.id.toString
@@ -37,14 +38,17 @@ class SunCrystal extends MyCommand {
             .defaultEmbedBuilder("Lilynouch Hunt Count", user)
             .withField("Total Kills", s"${scUser.totalKills} :skull:")
             .withField("Sun Crystals", s"${scUser.scCount} <:suncrystal:1026148453954371664>", inline = true)
+            .withField("Expected", s"${noDecimalFormat.format(scUser.expectedSuncrystals)}", inline = true)
             .withField("Rate", s"${decimalFormat.format(scUser.sunCrystalRate)}%", inline = true)
-            .withField("Offset", s"${decimalFormat.format(scUser.suncrystalOffset)}%", inline = true)
+//            .withField("Offset", s"${decimalFormat.format(scUser.suncrystalOffset)}%", inline = true)
             .withField("Scrolls", s"${scUser.scrollCount} <:10scroll:1026232443449126962>", inline = true)
+            .withField("Expected", s"${noDecimalFormat.format(scUser.expectedScrolls)}", inline = true)
             .withField("Rate", s"${decimalFormat.format(scUser.scrollRate)}%", inline = true)
-            .withField("Offset", s"${decimalFormat.format(scUser.scrollsOffset)}%", inline = true)
+//            .withField("Offset", s"${decimalFormat.format(scUser.scrollsOffset)}%", inline = true)
             .withField("Donut Resets", s"${scUser.donutCount} <:donut:1026233025236828180>", inline = true)
+            .withField("Expected", s"${noDecimalFormat.format(scUser.expectedDonuts)}", inline = true)
             .withField("Rate", s"${decimalFormat.format(scUser.donutRate)}%", inline = true)
-            .withField("Offset", s"${decimalFormat.format(scUser.donutsOffset)}%", inline = true)
+//            .withField("Offset", s"${decimalFormat.format(scUser.donutsOffset)}%", inline = true)
             .build
           )
           .fallbackTo(Future(
