@@ -6,14 +6,17 @@ import model.SCUser
 import org.bson.Document
 import spray.json.{JsNumber, JsObject, JsString, JsValue}
 
-import java.time.Instant
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 class SCUserMapper {
+
+  val dateFormatter: DateTimeFormatter = DateTimeFormatter.ISO_DATE
 
   def to(d: Document): SCUser = SCUser(
     d.getString("userId"),
     d.getString("serverId"),
-    Instant.ofEpochMilli(d.getLong("lastRoll")),
+    LocalDate.parse(d.getString("lastRoll"), dateFormatter),
     d.getLong("scCount"),
     d.getLong("donutCount"),
     d.getLong("scrollCount"),
@@ -25,7 +28,7 @@ class SCUserMapper {
   private def toJsValue(scUser: SCUser): JsValue = JsObject(
     "userId" -> JsString(scUser.userId),
     "serverId" -> JsString(scUser.serverId),
-    "lastRoll" -> JsNumber(scUser.lastRoll.toEpochMilli),
+    "lastRoll" -> JsString(scUser.lastRoll.format(dateFormatter)),
     "scCount" -> JsNumber(scUser.scCount),
     "donutCount" -> JsNumber(scUser.donutCount),
     "scrollCount" -> JsNumber(scUser.scrollCount),

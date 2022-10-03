@@ -2,23 +2,22 @@ package org.maple
 package model
 
 import java.time.temporal.ChronoUnit
-import java.time.{Instant, ZoneId}
+import java.time.{Instant, LocalDate}
 import java.util.UUID
 import scala.math.BigDecimal.RoundingMode
 
 case class SCUser(userId: String,
                   serverId: String,
-                  lastRoll: Instant,
+                  lastRoll: LocalDate,
                   scCount: Long,
                   donutCount: Long,
                   scrollCount: Long,
                   id: String = UUID.randomUUID().toString) {
 
   def canDoLilynouch: Boolean = {
-    val lastRolled = Option(lastRoll).map(_.atZone(ZoneId.systemDefault()))
-    val now = Instant.now().atZone(ZoneId.systemDefault())
-    val result = lastRolled.forall(lR => (lR.getDayOfMonth < now.getDayOfMonth || ChronoUnit.DAYS.between(lR, now) > 1) && lR.isBefore(now))
-    result
+    val now = LocalDate.now()
+    Option(lastRoll)
+      .forall(lR => ChronoUnit.DAYS.between(lR, now) >= 1 && lR.isBefore(now))
   }
 
   def totalKills: Long = scCount + donutCount + scrollCount
@@ -35,8 +34,8 @@ case class SCUser(userId: String,
   def scrollsOffset: Double =  ((scCount-expectedScrolls)*100.00)/expectedScrolls
   def donutsOffset: Double =  ((donutCount-expectedDonuts)*100.00)/expectedDonuts
 
-  def scIncreaser: SCUser = SCUser(userId, serverId, lastRoll = Instant.now(), scCount + 1, donutCount, scrollCount, id)
-  def donutIncreaser: SCUser = SCUser(userId, serverId, lastRoll = Instant.now(), scCount, donutCount + 1, scrollCount, id)
-  def scrollIncreaser: SCUser = SCUser(userId, serverId, lastRoll = Instant.now(), scCount, donutCount, scrollCount + 1, id)
+  def scIncreaser: SCUser = SCUser(userId, serverId, lastRoll = LocalDate.now(), scCount + 1, donutCount, scrollCount, id)
+  def donutIncreaser: SCUser = SCUser(userId, serverId, lastRoll = LocalDate.now(), scCount, donutCount + 1, scrollCount, id)
+  def scrollIncreaser: SCUser = SCUser(userId, serverId, lastRoll = LocalDate.now(), scCount, donutCount, scrollCount + 1, id)
 
 }
