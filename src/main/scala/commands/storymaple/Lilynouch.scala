@@ -31,7 +31,7 @@ class Lilynouch extends MyCommand {
             case Drop.SUNCRYSTAL => s"${user.mentionNick} <:suncrystal:1026148453954371664> I have received a crafting material from Lilynouch!"
             case Drop.SCROLL => s"${user.mentionNick} <:10scroll:1026232443449126962> Who cares amirite?"
           }
-          .fallbackTo(Future("You have already done Lily recently!"))
+          .fallbackTo(Future("You already did Lily today bitch <:gunsmile:1026528430277263423>"))
 
           Await.result(lilyFightResult, Duration.Inf)
       })
