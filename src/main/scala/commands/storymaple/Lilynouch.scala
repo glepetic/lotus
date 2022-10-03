@@ -20,16 +20,23 @@ class Lilynouch extends MyCommand {
     val scService: SCService = SCService.getInstance
 
     val userId = msg.user.id.toString
+    val result = msg
+      .message
+      .guild(msg.cache)
+      .map(guild => {
+        val lilyFightResult = scService.fightLilynouch(userId, guild.id.toString)
+          .map {
+            case Drop.DONUT => "<:donut:1026233025236828180>"
+            case Drop.SUNCRYSTAL => "<:suncrystal:1026148453954371664>"
+            case Drop.SCROLL => "<:10scroll:1026232443449126962>"
+          }
+          .fallbackTo(Future("You have already done Lily recently!"))
 
-    val lilyFightResult = scService.fightLilynouch(userId)
-      .map {
-        case Drop.DONUT => "<:donut:1026233025236828180>"
-        case Drop.SUNCRYSTAL => "<:suncrystal:1026148453954371664>"
-        case Drop.SCROLL => "<:10scroll:1026232443449126962>"
-      }
-      .fallbackTo(Future("You have already done Lily recently!"))
+          Await.result(lilyFightResult, Duration.Inf)
+      })
+      .getOrElse("This is not a discord server!")
 
-    val result: String = Await.result(lilyFightResult, Duration.Inf)
+
 
     CreateMessage(msg.textChannel.id, CreateMessageData(result))
 

@@ -12,6 +12,7 @@ class SCUserMapper {
 
   def to(d: Document): SCUser = SCUser(
     d.getString("userId"),
+    d.getString("serverId"),
     Instant.ofEpochMilli(d.getLong("lastRoll")),
     d.getInteger("scCount"),
     d.getInteger("donutCount"),
@@ -23,6 +24,7 @@ class SCUserMapper {
 
   private def toJsValue(scUser: SCUser): JsValue = JsObject(
     "userId" -> JsString(scUser.userId),
+    "serverId" -> JsString(scUser.serverId),
     "lastRoll" -> JsNumber(scUser.lastRoll.toEpochMilli),
     "scCount" -> JsNumber(scUser.scCount),
     "donutCount" -> JsNumber(scUser.donutCount),

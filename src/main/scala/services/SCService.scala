@@ -21,11 +21,11 @@ class SCService {
     Drop.DONUT -> ((scUser:SCUser) => scUser.donutIncreaser)
   )
 
-  def fightLilynouch(userId: String): Future[DropType] = {
-    repository.find(userId)
+  def fightLilynouch(userId: String, serverId: String): Future[DropType] = {
+    repository.find(userId, serverId)
       .map(opt => {
         opt.map(mapper.to)
-          .getOrElse(newSCUser(userId))
+          .getOrElse(newSCUser(userId, serverId))
       }
       )
       .filter(_.canDoLilynouch)
@@ -54,7 +54,7 @@ class SCService {
     LilynouchResult(actionMap.get(dropType).orThrow.apply(scUser), dropType)
   }
 
-  def newSCUser(userId: String): SCUser = SCUser(userId, null, 0, 0, 0)
+  def newSCUser(userId: String, serverId: String): SCUser = SCUser(userId, serverId, null, 0, 0, 0)
 
 }
 
