@@ -6,9 +6,9 @@ import model.Drop
 import services.SCService
 
 import ackcord.commands.UserCommandMessage
-import ackcord.requests.{CreateReaction, Request}
+import ackcord.requests.{CreateMessage, CreateMessageData, CreateReaction, Request}
 
-import scala.concurrent.Await
+import scala.concurrent.{Await, Future}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration.Duration
 
@@ -19,10 +19,7 @@ class Lilynouch extends MyCommand {
 
     val scService: SCService = SCService.getInstance
 
-    val message = msg.message
     val userId = msg.user.id.toString
-
-    println("init command")
 
     val lilyFightResult = scService.fightLilynouch(userId)
       .map {
@@ -30,15 +27,12 @@ class Lilynouch extends MyCommand {
         case Drop.SUNCRYSTAL => "<:suncrystal:1026148453954371664>"
         case Drop.SCROLL => "<:10scroll:1026232443449126962>"
       }
-//      .foreach(emoji => {
-//        BotEnvironment.client.foreach(client => client.requestsHelper.run(CreateMessage(msg.textChannel.id, CreateMessageData(emoji)))(msg.cache))
-//      })
+      .fallbackTo(Future("You have already done Lily recently!"))
 
     val result: String = Await.result(lilyFightResult, Duration.Inf)
 
-    println(result)
+    CreateMessage(msg.textChannel.id, CreateMessageData(result))
 
-    CreateReaction(message.channelId, message.id, "greencheck:871199809493671978")
   }
 
 }
