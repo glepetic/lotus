@@ -14,11 +14,7 @@ case class SCUser(userId: String,
                   scrollCount: Long,
                   id: String = UUID.randomUUID().toString) {
 
-  def canDoLilynouch: Boolean = {
-    val now = LocalDate.now()
-    Option(lastRoll)
-      .forall(lR => ChronoUnit.DAYS.between(lR, now) >= 1 && lR.isBefore(now))
-  }
+  def canDoLilynouch: Boolean = Option(lastRoll).forall(_.isBefore(LocalDate.now()))
 
   def totalKills: Long = scCount + donutCount + scrollCount
 
