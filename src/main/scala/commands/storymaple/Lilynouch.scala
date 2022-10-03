@@ -2,15 +2,15 @@ package org.maple
 package commands.storymaple
 
 import commands.MyCommand
+import model.Drop
 import services.SCService
 
 import ackcord.commands.UserCommandMessage
-import ackcord.requests.{CreateMessage, CreateMessageData, CreateReaction, DeleteMessage, Request}
-import org.maple.config.BotEnvironment
-import org.maple.model.Drop
-import org.maple.utils.OptionUtils.OptionImprovements
+import ackcord.requests.{CreateReaction, Request}
 
+import scala.concurrent.Await
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.duration.Duration
 
 class Lilynouch extends MyCommand {
   override def aliases: Seq[String] = Seq("lily")
@@ -24,15 +24,19 @@ class Lilynouch extends MyCommand {
 
     println("init command")
 
-    scService.fightLilynouch(userId)
+    val lilyFightResult = scService.fightLilynouch(userId)
       .map {
         case Drop.DONUT => "<:donut:1026233025236828180>"
         case Drop.SUNCRYSTAL => "<:suncrystal:1026148453954371664>"
         case Drop.SCROLL => "<:10scroll:1026232443449126962>"
       }
-      .foreach(emoji => {
-        BotEnvironment.client.foreach(client => client.requestsHelper.run(CreateMessage(msg.textChannel.id, CreateMessageData(emoji)))(msg.cache))
-      })
+//      .foreach(emoji => {
+//        BotEnvironment.client.foreach(client => client.requestsHelper.run(CreateMessage(msg.textChannel.id, CreateMessageData(emoji)))(msg.cache))
+//      })
+
+    val result: String = Await.result(lilyFightResult, Duration.Inf)
+
+    println(result)
 
     CreateReaction(message.channelId, message.id, "greencheck:871199809493671978")
   }
