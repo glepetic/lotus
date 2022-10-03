@@ -21,9 +21,9 @@ class Lilynouch extends MyCommand {
 
     scService.fightLilynouch(msg.user.id.toString, msg.message.guild(msg.cache).orThrow.id.toString)
       .map {
-        case Drop.DONUT => "<:donut:1026233067385397248>"
-        case Drop.SUNCRYSTAL => "<:suncrystal:1026233773832032331>"
-        case Drop.SCROLL => "<:10scroll:1026233940547207278>"
+        case Drop.DONUT => "<:donut:1026233025236828180>"
+        case Drop.SUNCRYSTAL => "<:suncrystal:1026148453954371664>"
+        case Drop.SCROLL => "<:10scroll:1026232443449126962>"
       }
       .foreach(emoji => {
         BotEnvironment.client.foreach(client => client.requestsHelper.run(CreateMessage(msg.textChannel.id, CreateMessageData(emoji)))(msg.cache))

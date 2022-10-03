@@ -22,18 +22,23 @@ class SCService {
   )
 
   def fightLilynouch(userId: String, serverId: String): Future[DropType] = {
+    print("llegue aca")
     repository.find(userId, serverId)
-      .map(opt => opt.map(mapper.to)
-        .getOrElse(newSCUser(userId, serverId))
+      .map(opt => {
+        print("llegue aca x2")
+        opt.map(mapper.to)
+          .getOrElse(newSCUser(userId, serverId))
+      }
       )
       .filter(_.canDoLilynouch)
       .map(scUser => {
+        print("llegue aca x3")
         val afterLily = this.fightLilynouch(scUser)
         val document = mapper.to(afterLily.scUser)
-//        Option(scUser.lastRoll)
-//          .map(_ => usr => repository.replace(usr))
-//          .getOrElse(usr => repository.insert(usr))
-//          .apply(document)
+        Option(scUser.lastRoll)
+          .map(_ => usr => repository.replace(usr))
+          .getOrElse(usr => repository.insert(usr))
+          .apply(document)
         afterLily.drop
       })
   }

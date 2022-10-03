@@ -23,7 +23,7 @@ class SCUsersRepository extends MongoRepository {
     .toFutureOption()
   def insert(d: Document): Unit = this.collection
     .insertOne(d)
-    .toFuture()
+    .foreach(println)
   def replace(d: Document): Unit = this.collection
     .replaceOne(equal("id", d.getString("id")), d)
     .foreach(println)
