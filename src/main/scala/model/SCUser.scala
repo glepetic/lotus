@@ -30,8 +30,9 @@ case class SCUser(userId: String,
   def scrollsOffset: Double =  ((scCount-expectedScrolls)*100.00)/expectedScrolls
   def donutsOffset: Double =  ((donutCount-expectedDonuts)*100.00)/expectedDonuts
 
-  def scIncreaser: SCUser = SCUser(userId, serverId, lastRoll = LocalDate.now(), scCount + 1, donutCount, scrollCount, id)
-  def donutIncreaser: SCUser = SCUser(userId, serverId, lastRoll = LocalDate.now(), scCount, donutCount + 1, scrollCount, id)
-  def scrollIncreaser: SCUser = SCUser(userId, serverId, lastRoll = LocalDate.now(), scCount, donutCount, scrollCount + 1, id)
+  def increaseSCNoTimeUpdate: SCUser = SCUser(userId, serverId, lastRoll, scCount + 1, donutCount, scrollCount, id)
+  def increaseSC: SCUser = SCUser(userId, serverId, lastRoll = LocalDate.now(), scCount + 1, donutCount, scrollCount, id)
+  def increaseDonut: SCUser = SCUser(userId, serverId, lastRoll = LocalDate.now(), scCount, donutCount + 1, scrollCount, id)
+  def increaseScroll: SCUser = SCUser(userId, serverId, lastRoll = LocalDate.now(), scCount, donutCount, scrollCount + 1, id)
 
 }

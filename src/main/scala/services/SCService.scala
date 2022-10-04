@@ -16,9 +16,9 @@ class SCService {
   private val repository: SCUsersRepository = SCUsersRepository.getInstance
   private val mapper: SCUserMapper = new SCUserMapper
   private val actionMap = HashMap(
-    Drop.SCROLL -> ((scUser:SCUser) => scUser.scrollIncreaser),
-    Drop.SUNCRYSTAL -> ((scUser:SCUser) => scUser.scIncreaser),
-    Drop.DONUT -> ((scUser:SCUser) => scUser.donutIncreaser)
+    Drop.SCROLL -> ((scUser:SCUser) => scUser.increaseScroll),
+    Drop.SUNCRYSTAL -> ((scUser:SCUser) => scUser.increaseSC),
+    Drop.DONUT -> ((scUser:SCUser) => scUser.increaseDonut)
   )
 
   def findScUser(userId: String, serverId: String): Future[SCUser] = repository
@@ -26,9 +26,9 @@ class SCService {
     .map(opt => opt.map(mapper.to)
         .getOrElse(newSCUser(userId, serverId)))
 
-  def fightLilynouch(userId: String, serverId: String): Future[DropType] = {
+  def fightLilynouch(userId: String, serverId: String, ignoreCooldown: Boolean = false): Future[DropType] = {
     this.findScUser(userId, serverId)
-      .filter(_.canDoLilynouch)
+      .filter(scusr => ignoreCooldown || scusr.canDoLilynouch)
       .map(scUser => {
         val afterLily = this.fightLilynouch(scUser)
         val document = mapper.to(afterLily.scUser)
@@ -38,6 +38,11 @@ class SCService {
           .apply(document)
         afterLily.drop
       })
+  }
+
+  def guaranteedSC(userId: String, discordServerId: String): Future[SCUser] = {
+    this.findScUser(userId, discordServerId)
+      .map(usr => usr.increaseSCNoTimeUpdate)
   }
 
   private def fightLilynouch(scUser: SCUser): LilynouchResult = {
