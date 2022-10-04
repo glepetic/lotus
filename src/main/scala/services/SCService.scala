@@ -31,11 +31,7 @@ class SCService {
       .filter(scusr => ignoreCooldown || scusr.canDoLilynouch)
       .map(scUser => {
         val afterLily = this.fightLilynouch(scUser)
-        val document = mapper.to(afterLily.scUser)
-        Option(scUser.lastRoll)
-          .map(_ => usr => repository.replace(usr))
-          .getOrElse(usr => repository.insert(usr))
-          .apply(document)
+        this.save(afterLily.scUser)
         afterLily.drop
       })
   }

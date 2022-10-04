@@ -1,11 +1,8 @@
 package org.maple
 package services
 
-import org.maple.model.DropType
-
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.{Await, Future}
-import scala.concurrent.duration.Duration
+import scala.concurrent.Future
 import scala.util.Random
 
 class TrollService {
@@ -20,8 +17,7 @@ class TrollService {
     val midLetters = List("c", "o", "a")
     val endLetters = List("t", "l")
 
-//    val shuffledName = "X" + lettersAsRandomString(firstLetters) + lettersAsRandomString(midLetters) + lettersAsRandomString(endLetters)
-    val shuffledName = if(Random.nextInt(2) == 0) "Xiuhacoatl" else "Wrong"
+    val shuffledName = "X" + lettersAsRandomString(firstLetters) + lettersAsRandomString(midLetters) + lettersAsRandomString(endLetters)
 
     Future(shuffledName)
       .filter(name => name.equalsIgnoreCase("Xiuhacoatl"))
