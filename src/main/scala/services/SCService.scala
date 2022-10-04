@@ -40,9 +40,18 @@ class SCService {
       })
   }
 
-  def guaranteedSC(userId: String, discordServerId: String): Future[SCUser] = {
+  def guaranteedSC(userId: String, discordServerId: String): Future[Unit] = {
     this.findScUser(userId, discordServerId)
       .map(usr => usr.increaseSCNoTimeUpdate)
+      .map(this.save)
+  }
+
+  private def save(scUser: SCUser): Unit = {
+    val document = mapper.to(scUser)
+    Option(scUser.lastRoll)
+      .map(_ => usr => repository.replace(usr))
+      .getOrElse(usr => repository.insert(usr))
+      .apply(document)
   }
 
   private def fightLilynouch(scUser: SCUser): LilynouchResult = {
