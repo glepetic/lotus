@@ -18,9 +18,15 @@ case class SCUser(userId: String,
 
   def totalKills: Long = scCount + donutCount + scrollCount
 
-  def sunCrystalRate: BigDecimal = BigDecimal(scCount*100.00/totalKills).setScale(2, RoundingMode.HALF_UP)
-  def scrollRate: BigDecimal = BigDecimal(scrollCount*100.00/totalKills).setScale(2, RoundingMode.HALF_UP)
-  def donutRate: BigDecimal = BigDecimal(donutCount*100.00/totalKills).setScale(2, RoundingMode.HALF_UP)
+  def sunCrystalRate: BigDecimal = this.rate(scCount)
+  def scrollRate: BigDecimal = this.rate(scrollCount)
+  def donutRate: BigDecimal = this.rate(donutCount)
+
+  private def rate(count: Long): BigDecimal = BigDecimal(Option(totalKills)
+    .filter(tk => tk > 0)
+    .map(tk => count*100.00/tk)
+    .getOrElse(0))
+    .setScale(2, RoundingMode.HALF_UP)
 
   def expectedSuncrystals: Long = totalKills/6
   def expectedScrolls: Long = (totalKills*247)/300
