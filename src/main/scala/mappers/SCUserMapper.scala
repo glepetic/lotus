@@ -4,7 +4,7 @@ package mappers
 import model.SCUser
 
 import org.bson.Document
-import spray.json.{JsNumber, JsObject, JsString, JsValue}
+import spray.json.{JsNull, JsNumber, JsObject, JsString, JsValue}
 
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -16,7 +16,9 @@ class SCUserMapper {
   def to(d: Document): SCUser = SCUser(
     d.getString("userId"),
     d.getString("serverId"),
-    LocalDate.parse(d.getString("lastRoll"), dateFormatter),
+    Option(d.getString("lastRoll"))
+      .map(lR => LocalDate.parse(lR, dateFormatter))
+      .orNull,
     d.getInteger("scCount").toLong,
     d.getInteger("donutCount").toLong,
     d.getInteger("scrollCount").toLong,
@@ -28,7 +30,9 @@ class SCUserMapper {
   private def toJsValue(scUser: SCUser): JsValue = JsObject(
     "userId" -> JsString(scUser.userId),
     "serverId" -> JsString(scUser.serverId),
-    "lastRoll" -> JsString(scUser.lastRoll.format(dateFormatter)),
+    "lastRoll" -> Option(scUser.lastRoll)
+      .map(lR => JsString(lR.format(dateFormatter)))
+      .getOrElse(JsNull),
     "scCount" -> JsNumber(scUser.scCount),
     "donutCount" -> JsNumber(scUser.donutCount),
     "scrollCount" -> JsNumber(scUser.scrollCount),

@@ -25,6 +25,7 @@ class SCService {
     .find(userId, serverId)
     .map(opt => opt.map(mapper.to)
         .getOrElse(newSCUser(userId, serverId)))
+    .fallbackTo(Future(newSCUser(userId, serverId)))
 
   def fightLilynouch(userId: String, serverId: String, ignoreCooldown: Boolean = false): Future[DropType] = {
     this.findScUser(userId, serverId)
