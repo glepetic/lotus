@@ -27,10 +27,13 @@ class SunCrystal extends MyCommand {
 
     val decimalFormat: DecimalFormat = new DecimalFormat("#.##")
 
-    print(arguments.join(" ").trim)
+    val inputArg = arguments
+      .join(" ")
+      .trim
+      .filter(_.isDigit)
 
     val user = msg.user
-    val userId = msg.user.id.toString
+    val userId = Option(inputArg).filter(_.nonEmpty).getOrElse(msg.user.id.toString)
     val embed = msg
       .message
       .guild(msg.cache)
