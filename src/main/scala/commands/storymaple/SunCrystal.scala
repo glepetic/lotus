@@ -38,7 +38,7 @@ class SunCrystal extends MyCommand {
       .message
       .guild(msg.cache)
       .map(guild => {
-        val lilyFightResult = scService.findScUser(userId, guild.id.toString)
+        val scUserResult = scService.findScUser(userId, guild.id.toString)
           .map(scUser => embedMapper
             .defaultEmbedBuilder("Lilynouch Hunt Count", user)
             .withField("Total Kills", s"${scUser.totalKills} :skull:")
@@ -54,14 +54,11 @@ class SunCrystal extends MyCommand {
             .withField("Expected", s"${scUser.expectedDonuts}", inline = true)
             .withField("Rate", s"${decimalFormat.format(scUser.donutRate)}%", inline = true)
 //            .withField("Offset", s"${decimalFormat.format(scUser.donutsOffset)}%", inline = true)
+            .withField("Last Roll", Option(scUser.lastRoll).map(_.toString).getOrElse("Never"))
             .build
           )
-          .fallbackTo(Future(
-            embedMapper
-              .toErrorEmbed("Could not complete the request", "Lilynouch Hunt Count Error", user)
-          ))
 
-          Await.result(lilyFightResult, Duration.Inf)
+          Await.result(scUserResult, Duration.Inf)
       })
       .getOrElse(embedMapper
         .toErrorEmbed("This is not a discord server!", "Lilynouch Hunt Count Error", user))
