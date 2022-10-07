@@ -26,6 +26,8 @@ class SunCrystal extends MyCommand {
 
     val decimalFormat: DecimalFormat = new DecimalFormat("#.##")
 
+    print(arguments)
+
     val user = msg.user
     val userId = msg.user.id.toString
     val embed = msg
