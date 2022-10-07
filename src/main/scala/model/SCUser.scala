@@ -22,11 +22,11 @@ case class SCUser(userId: String,
   def scrollRate: BigDecimal = this.rate(scrollCount)
   def donutRate: BigDecimal = this.rate(donutCount)
 
-  private def rate(count: Long): BigDecimal = BigDecimal(Option(totalKills)
+  private def rate(count: Long): BigDecimal = Option(totalKills)
     .filter(tk => tk > 0)
-    .map(tk => count*100.00/tk)
-    .getOrElse(0))
-    .setScale(2, RoundingMode.HALF_UP)
+    .map(tk => BigDecimal(count*100.00/tk).setScale(2, RoundingMode.HALF_UP))
+    .getOrElse(BigDecimal(0))
+
 
   def expectedSuncrystals: Long = totalKills/6
   def expectedScrolls: Long = (totalKills*247)/300
