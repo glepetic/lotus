@@ -45,7 +45,8 @@ class SCService {
 
   private def save(scUser: SCUser): Unit = {
     val document = mapper.to(scUser)
-    Option(scUser.lastRoll)
+    Option(scUser)
+      .filter(usr => usr.totalKills > 1)
       .map(_ => usr => repository.replace(usr))
       .getOrElse(usr => repository.insert(usr))
       .apply(document)
