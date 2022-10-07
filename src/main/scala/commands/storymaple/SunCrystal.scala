@@ -9,6 +9,7 @@ import ackcord.commands.UserCommandMessage
 import ackcord.requests.{CreateMessage, CreateMessageData, Request}
 import org.maple.builders.EmbedBuilder
 import org.maple.mappers.EmbedMapper
+import org.maple.utils.IterableUtils.IterableImprovements
 
 import java.text.DecimalFormat
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -26,7 +27,7 @@ class SunCrystal extends MyCommand {
 
     val decimalFormat: DecimalFormat = new DecimalFormat("#.##")
 
-    print(arguments)
+    print(arguments.join(" ").trim)
 
     val user = msg.user
     val userId = msg.user.id.toString
