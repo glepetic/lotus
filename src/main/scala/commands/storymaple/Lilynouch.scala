@@ -6,8 +6,10 @@ import model.Drop
 import services.SCService
 
 import ackcord.commands.UserCommandMessage
-import ackcord.requests.{CreateMessage, CreateMessageData, CreateReaction, Request}
+import ackcord.requests.{CreateMessage, CreateMessageData, Request}
 
+import java.time.LocalDateTime
+import java.time.temporal.ChronoUnit.{HOURS, MINUTES, SECONDS}
 import scala.concurrent.{Await, Future}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration.Duration
@@ -31,7 +33,18 @@ class Lilynouch extends MyCommand {
             case Drop.SUNCRYSTAL => s"${user.mentionNick} <:suncrystal:1026148453954371664> I have received a crafting material from Lilynouch!"
             case Drop.SCROLL => s"${user.mentionNick} <:10scroll:1026232443449126962> Who cares amirite?"
           }
-          .fallbackTo(Future("You already did Lily today bitch <:gunsmile:1026528430277263423>"))
+          .fallbackTo({
+            val now = LocalDateTime.now();
+            val reset = now
+              .plusDays(1)
+              .withHour(0)
+              .withMinute(0)
+              .withSecond(0);
+            val hours = HOURS.between(now, reset)
+            val minutes = MINUTES.between(now, reset) - hours*60
+            val seconds = SECONDS.between(now, reset) - hours*60*60 - minutes*60
+            Future(s"You already did Lily today bitch <:gunsmile:1026528430277263423> Wait $hours hours $minutes minutes and $seconds seconds, then try again")
+          })
 
           Await.result(lilyFightResult, Duration.Inf)
       })
