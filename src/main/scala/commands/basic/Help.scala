@@ -4,7 +4,6 @@ package commands.basic
 import builders.EmbedBuilder
 import commands.MyCommand
 import config.MessageProperties
-import utils.OptionUtils.OptionImprovements
 
 import ackcord.commands.UserCommandMessage
 import ackcord.requests.{CreateMessage, CreateMessageData, Request}
@@ -25,7 +24,6 @@ class Help extends MyCommand {
       .build
 
     CreateMessage(msg.textChannel.id, CreateMessageData(embeds = Seq(embed)))
-    CreateMessage(msg.textChannel.id, CreateMessageData("@everyone"))
   }
 
 }

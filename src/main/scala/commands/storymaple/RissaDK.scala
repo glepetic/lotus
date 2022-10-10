@@ -11,7 +11,7 @@ import scala.concurrent.Await
 import scala.concurrent.duration.Duration
 
 class RissaDK extends MyCommand {
-  override def aliases: Seq[String] = Seq("rdk","rissadk")
+  override def aliases: Seq[String] = Seq("duh")
 
   override def execute(msg: UserCommandMessage[_], arguments: List[String]): Request[_] = {
 

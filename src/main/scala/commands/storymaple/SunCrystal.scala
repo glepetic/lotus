@@ -3,7 +3,7 @@ package commands.storymaple
 
 import commands.MyCommand
 import model.Drop
-import services.SCService
+import services.StatsService
 
 import ackcord.commands.UserCommandMessage
 import ackcord.requests.{CreateMessage, CreateMessageData, Request}
@@ -18,11 +18,11 @@ import scala.concurrent.{Await, Future}
 import scala.math.BigDecimal.RoundingMode
 
 class SunCrystal extends MyCommand {
-  override def aliases: Seq[String] = Seq("sc", "suncrystal")
+  override def aliases: Seq[String] = Seq("check", "checkme", "stats", "statistics")
 
   override def execute(msg: UserCommandMessage[_], arguments: List[String]): Request[_] = {
 
-    val scService: SCService = SCService.getInstance
+    val statsService: StatsService = StatsService.getInstance
     val embedMapper: EmbedMapper = new EmbedMapper
 
     val decimalFormat: DecimalFormat = new DecimalFormat("#.##")
@@ -38,27 +38,22 @@ class SunCrystal extends MyCommand {
       .message
       .guild(msg.cache)
       .map(guild => {
-        val scUserResult = scService.findScUser(userId, guild.id.toString)
-          .map(scUser => embedMapper
-            .defaultEmbedBuilder("Lilynouch Hunt Count", user)
-            .withField("Total Kills", s"${scUser.totalKills} :skull:")
-            .withField("Sun Crystals", s"${scUser.scCount} <:suncrystal:1026148453954371664>", inline = true)
-            .withField("Expected", s"${scUser.expectedSuncrystals}", inline = true)
-            .withField("Rate", s"${decimalFormat.format(scUser.sunCrystalRate)}%", inline = true)
-//            .withField("Offset", s"${decimalFormat.format(scUser.suncrystalOffset)}%", inline = true)
-            .withField("Scrolls", s"${scUser.scrollCount} <:10scroll:1026232443449126962>", inline = true)
-            .withField("Expected", s"${scUser.expectedScrolls}", inline = true)
-            .withField("Rate", s"${decimalFormat.format(scUser.scrollRate)}%", inline = true)
-//            .withField("Offset", s"${decimalFormat.format(scUser.scrollsOffset)}%", inline = true)
-            .withField("Donut Resets", s"${scUser.donutCount} <:donut:1026233025236828180>", inline = true)
-            .withField("Expected", s"${scUser.expectedDonuts}", inline = true)
-            .withField("Rate", s"${decimalFormat.format(scUser.donutRate)}%", inline = true)
-//            .withField("Offset", s"${decimalFormat.format(scUser.donutsOffset)}%", inline = true)
-            .withField("Last Roll", Option(scUser.lastRoll).map(_.toString).getOrElse("Never"))
+        val userResult = statsService.findUser(userId, guild.id.toString)
+          .map(usr => embedMapper
+            .defaultEmbedBuilder("User Statistics", user)
+            .withField("Boomer Stamps", s"${usr.boomerStampCount} <:boomerissa:1028876085976375296>")
+            .withField("Total Kills", s"${usr.totalKills} :skull:")
+            .withField("Sun Crystals", s"${usr.scCount} <:suncrystal:1026148453954371664>")
+            .withField("Rate", s"${decimalFormat.format(usr.sunCrystalRate)}%")
+//            .withField("Scrolls", s"${usr.scrollCount} <:10scroll:1026232443449126962>")
+//            .withField("Scroll Rate", s"${decimalFormat.format(usr.scrollRate)}%")
+            .withField("Donut Resets", s"${usr.donutCount} <:donut:1026233025236828180>")
+            .withField("Donut Rate", s"${decimalFormat.format(usr.donutRate)}%")
+            .withField("Last Lily", Option(usr.lastRoll).map(_.toString).getOrElse("Never"))
             .build
           )
 
-          Await.result(scUserResult, Duration.Inf)
+          Await.result(userResult, Duration.Inf)
       })
       .getOrElse(embedMapper
         .toErrorEmbed("This is not a discord server!", "Lilynouch Hunt Count Error", user))

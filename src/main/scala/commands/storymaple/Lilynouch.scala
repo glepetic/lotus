@@ -3,7 +3,7 @@ package commands.storymaple
 
 import commands.MyCommand
 import model.Drop
-import services.SCService
+import services.StatsService
 
 import ackcord.commands.UserCommandMessage
 import ackcord.requests.{CreateMessage, CreateMessageData, Request}
@@ -19,7 +19,7 @@ class Lilynouch extends MyCommand {
 
   override def execute(msg: UserCommandMessage[_], arguments: List[String]): Request[_] = {
 
-    val scService: SCService = SCService.getInstance
+    val scService: StatsService = StatsService.getInstance
 
     val user = msg.user
     val userId = user.id.toString

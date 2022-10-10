@@ -1,7 +1,7 @@
 package org.maple
 package mappers
 
-import model.SCUser
+import model.User
 
 import org.bson.Document
 import spray.json.{JsNull, JsNumber, JsObject, JsString, JsValue}
@@ -9,11 +9,11 @@ import spray.json.{JsNull, JsNumber, JsObject, JsString, JsValue}
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-class SCUserMapper {
+class UserMapper {
 
   val dateFormatter: DateTimeFormatter = DateTimeFormatter.ISO_DATE
 
-  def to(d: Document): SCUser = SCUser(
+  def to(d: Document): User = User(
     d.getString("userId"),
     d.getString("serverId"),
     Option(d.getString("lastRoll"))
@@ -22,21 +22,23 @@ class SCUserMapper {
     d.getInteger("scCount").toLong,
     d.getInteger("donutCount").toLong,
     d.getInteger("scrollCount").toLong,
+    d.getInteger("boomerStampCount").toLong,
     d.getString("id")
   )
 
-  def to(usr: SCUser): Document = Document.parse(this.toJsValue(usr).prettyPrint)
+  def to(usr: User): Document = Document.parse(this.toJsValue(usr).prettyPrint)
 
-  private def toJsValue(scUser: SCUser): JsValue = JsObject(
-    "userId" -> JsString(scUser.userId),
-    "serverId" -> JsString(scUser.serverId),
-    "lastRoll" -> Option(scUser.lastRoll)
+  private def toJsValue(user: User): JsValue = JsObject(
+    "userId" -> JsString(user.userId),
+    "serverId" -> JsString(user.serverId),
+    "lastRoll" -> Option(user.lastRoll)
       .map(lR => JsString(lR.format(dateFormatter)))
       .getOrElse(JsNull),
-    "scCount" -> JsNumber(scUser.scCount),
-    "donutCount" -> JsNumber(scUser.donutCount),
-    "scrollCount" -> JsNumber(scUser.scrollCount),
-    "id" -> JsString(scUser.id),
+    "scCount" -> JsNumber(user.scCount),
+    "donutCount" -> JsNumber(user.donutCount),
+    "scrollCount" -> JsNumber(user.scrollCount),
+    "boomerStampCount" -> JsNumber(user.boomerStampCount),
+    "id" -> JsString(user.id),
   )
 
 }

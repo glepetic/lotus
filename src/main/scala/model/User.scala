@@ -6,13 +6,14 @@ import java.time.{Instant, LocalDate}
 import java.util.UUID
 import scala.math.BigDecimal.RoundingMode
 
-case class SCUser(userId: String,
-                  serverId: String,
-                  lastRoll: LocalDate,
-                  scCount: Long,
-                  donutCount: Long,
-                  scrollCount: Long,
-                  id: String = UUID.randomUUID().toString) {
+case class User(userId: String,
+                serverId: String,
+                lastRoll: LocalDate,
+                scCount: Long,
+                donutCount: Long,
+                scrollCount: Long,
+                boomerStampCount: Long,
+                id: String = UUID.randomUUID().toString) {
 
   def canDoLilynouch: Boolean = Option(lastRoll).forall(_.isBefore(LocalDate.now()))
 
@@ -36,9 +37,9 @@ case class SCUser(userId: String,
   def scrollsOffset: Double =  ((scCount-expectedScrolls)*100.00)/expectedScrolls
   def donutsOffset: Double =  ((donutCount-expectedDonuts)*100.00)/expectedDonuts
 
-  def increaseSCNoTimeUpdate: SCUser = SCUser(userId, serverId, lastRoll, scCount + 1, donutCount, scrollCount, id)
-  def increaseSC: SCUser = SCUser(userId, serverId, lastRoll = LocalDate.now(), scCount + 1, donutCount, scrollCount, id)
-  def increaseDonut: SCUser = SCUser(userId, serverId, lastRoll = LocalDate.now(), scCount, donutCount + 1, scrollCount, id)
-  def increaseScroll: SCUser = SCUser(userId, serverId, lastRoll = LocalDate.now(), scCount, donutCount, scrollCount + 1, id)
+  def increaseBoomerStamps: User = User(userId, serverId, lastRoll, scCount, donutCount, scrollCount, boomerStampCount + 1, id)
+  def increaseSC: User = User(userId, serverId, lastRoll = LocalDate.now(), scCount + 1, donutCount, scrollCount, boomerStampCount, id)
+  def increaseDonut: User = User(userId, serverId, lastRoll = LocalDate.now(), scCount, donutCount + 1, scrollCount, boomerStampCount, id)
+  def increaseScroll: User = User(userId, serverId, lastRoll = LocalDate.now(), scCount, donutCount, scrollCount + 1, boomerStampCount, id)
 
 }
