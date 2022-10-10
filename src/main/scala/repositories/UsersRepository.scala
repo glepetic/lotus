@@ -11,10 +11,10 @@ import org.mongodb.scala.model.Sorts.descending
 import scala.concurrent.Future
 
 
-class SCUsersRepository extends MongoRepository {
+class UsersRepository extends MongoRepository {
 
   override protected def databaseName: String = DBConfig.defaultDB
-  override protected def collectionName: String = "scusers"
+  override protected def collectionName: String = "users"
 
   def find(discordUserId: String, discordServerId: String): Future[Option[Document]] = this.collection
     .find(and(equal("userId", discordUserId), equal("serverId", discordServerId)))
@@ -30,9 +30,9 @@ class SCUsersRepository extends MongoRepository {
 
 }
 
-object SCUsersRepository {
-  private val instance = new SCUsersRepository
-  def getInstance: SCUsersRepository = instance
+object UsersRepository {
+  private val instance = new UsersRepository
+  def getInstance: UsersRepository = instance
 }
 
 

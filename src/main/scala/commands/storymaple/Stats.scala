@@ -17,7 +17,7 @@ import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, Future}
 import scala.math.BigDecimal.RoundingMode
 
-class SunCrystal extends MyCommand {
+class Stats extends MyCommand {
   override def aliases: Seq[String] = Seq("check", "checkme", "stats", "statistics")
 
   override def execute(msg: UserCommandMessage[_], arguments: List[String]): Request[_] = {
@@ -44,11 +44,11 @@ class SunCrystal extends MyCommand {
             .withField("Boomer Stamps", s"${usr.boomerStampCount} <:boomerissa:1028876085976375296>")
             .withField("Total Kills", s"${usr.totalKills} :skull:")
             .withField("Sun Crystals", s"${usr.scCount} <:suncrystal:1026148453954371664>")
-            .withField("Rate", s"${decimalFormat.format(usr.sunCrystalRate)}%")
+            .withField("SC Rate", s"${decimalFormat.format(usr.sunCrystalRate)}%")
 //            .withField("Scrolls", s"${usr.scrollCount} <:10scroll:1026232443449126962>")
 //            .withField("Scroll Rate", s"${decimalFormat.format(usr.scrollRate)}%")
             .withField("Donut Resets", s"${usr.donutCount} <:donut:1026233025236828180>")
-            .withField("Donut Rate", s"${decimalFormat.format(usr.donutRate)}%")
+            .withField("D Rate", s"${decimalFormat.format(usr.donutRate)}%")
             .withField("Last Lily", Option(usr.lastRoll).map(_.toString).getOrElse("Never"))
             .build
           )

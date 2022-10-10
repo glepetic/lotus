@@ -3,7 +3,7 @@ package services
 
 import mappers.UserMapper
 import model.{Drop, DropType, LilynouchResult, User}
-import repositories.SCUsersRepository
+import repositories.UsersRepository
 import utils.OptionUtils.OptionImprovements
 
 import scala.collection.immutable.HashMap
@@ -13,7 +13,7 @@ import scala.util.Random
 
 class StatsService {
 
-  private val repository: SCUsersRepository = SCUsersRepository.getInstance
+  private val repository: UsersRepository = UsersRepository.getInstance
   private val mapper: UserMapper = new UserMapper
   private val actionMap = HashMap(
     Drop.SCROLL -> ((user:User) => user.increaseScroll),
