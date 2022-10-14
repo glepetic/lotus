@@ -39,7 +39,7 @@ case class User(userId: String,
 
   def increaseBoomerStamps: User = User(userId, serverId, lastRoll, scCount, donutCount, scrollCount, boomerStampCount + 1, id)
   def increaseSC: User = User(userId, serverId, lastRoll = LocalDate.now(), scCount + 1, donutCount, scrollCount, boomerStampCount, id)
-  def increaseDonut: User = User(userId, serverId, lastRoll = LocalDate.now(), scCount, donutCount + 1, scrollCount, boomerStampCount, id)
+  def donutPenalty: User = User(userId, serverId, lastRoll = LocalDate.now(), scCount - 3, donutCount + 1, scrollCount, boomerStampCount, id)
   def increaseScroll: User = User(userId, serverId, lastRoll = LocalDate.now(), scCount, donutCount, scrollCount + 1, boomerStampCount, id)
 
 }

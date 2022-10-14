@@ -23,10 +23,10 @@ class TrollService {
     Future(shuffledName)
       .filter(name => name.equalsIgnoreCase(rissadkName))
       .flatMap(_ => statsService.guaranteedBoomerStamp(userId, discordServerId))
-      .map(_ => s"<@!$userId> An awkward person approaches and stares directly at you.\n" +
+      .map(_ => s"An awkward person approaches and stares directly at you.\n" +
         "\"Wow, you've spelt it right, these boomers have been mispelling it all day. Here take this!\"\n" +
         s"She hands you a picture of herself with an autograph that reads *$rissadkName*. Apparently she is too boomer herself to spell it right...\n" +
-        s"@everyone Congratulate <@!$userId> on obtaining a boomer stamp! <:boomerissa:1028876085976375296>"
+        s"<@!$userId> Congratulations on obtaining a boomer stamp! <:boomerissa:1028876085976375296>"
       )
       .fallbackTo(Future(shuffledName))
 

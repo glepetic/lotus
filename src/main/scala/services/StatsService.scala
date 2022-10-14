@@ -18,7 +18,7 @@ class StatsService {
   private val actionMap = HashMap(
     Drop.SCROLL -> ((user:User) => user.increaseScroll),
     Drop.SUNCRYSTAL -> ((scUser:User) => scUser.increaseSC),
-    Drop.DONUT -> ((scUser:User) => scUser.increaseDonut)
+    Drop.DONUT -> ((scUser:User) => scUser.donutPenalty)
   )
 
   def findUser(userId: String, serverId: String): Future[User] = repository
