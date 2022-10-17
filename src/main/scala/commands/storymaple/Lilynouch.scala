@@ -29,7 +29,7 @@ class Lilynouch extends MyCommand {
       .map(guild => {
         val lilyFightResult = statsService.fightLilynouch(userId, guild.id.toString)
           .map {
-            case Drop.DONUT => s"${user.mentionNick} A :doughnut: man pops up." +
+            case Drop.DONUT => s"${user.mentionNick} A :doughnut: man pops up.\n" +
               "\"*We* have proof that you have been harrassing deafbat at Target Dummies. *We* do not take harrassment lightly. I will have to confiscate 3 of your sun crystals.\"\n" +
               "Fucking donut... <:donut:1026233025236828180>"
             case Drop.SUNCRYSTAL => s"${user.mentionNick} <:suncrystal:1026148453954371664> I have received a crafting material from Lilynouch!"
