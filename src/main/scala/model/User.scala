@@ -17,7 +17,7 @@ case class User(userId: String,
 
   def canDoLilynouch: Boolean = Option(lastRoll).forall(_.isBefore(LocalDate.now()))
 
-  def totalKills: Long = scCount + donutCount + scrollCount
+  def totalKills: Long = scCount + donutCount*4 + scrollCount
 
   def sunCrystalRate: BigDecimal = this.rate(scCount)
   def scrollRate: BigDecimal = this.rate(scrollCount)
