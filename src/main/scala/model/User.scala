@@ -1,8 +1,7 @@
 package org.maple
 package model
 
-import java.time.temporal.ChronoUnit
-import java.time.{Instant, LocalDate}
+import java.time.LocalDate
 import java.util.UUID
 import scala.math.BigDecimal.RoundingMode
 

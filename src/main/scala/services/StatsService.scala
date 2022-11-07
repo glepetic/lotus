@@ -21,6 +21,10 @@ class StatsService {
     Drop.DONUT -> ((scUser:User) => scUser.donutPenalty)
   )
 
+  def findTopUsers10BySCCount(serverId: String): Future[Seq[User]] = this.repository
+    .findTop10ByScCount(serverId)
+    .map(_.map(this.mapper.to))
+
   def findUser(userId: String, serverId: String): Future[User] = repository
     .find(userId, serverId)
     .map(opt => opt.map(mapper.to)
