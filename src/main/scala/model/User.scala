@@ -16,11 +16,15 @@ case class User(userId: String,
 
   def canDoLilynouch: Boolean = Option(lastRoll).forall(_.isBefore(LocalDate.now()))
 
-  def totalKills: Long = scCount + donutCount*4 + scrollCount
+//  def totalKills: Long = scCount + donutCount*4 + scrollCount
+  def totalKills: Long = 420
 
-  def sunCrystalRate: BigDecimal = this.rate(scCount)
-  def scrollRate: BigDecimal = this.rate(scrollCount)
-  def donutRate: BigDecimal = this.rate(donutCount)
+//  def sunCrystalRate: BigDecimal = this.rate(scCount)
+  def sunCrystalRate: BigDecimal = 69
+//  def scrollRate: BigDecimal = this.rate(scrollCount)
+  def scrollRate: BigDecimal = 69
+//  def donutRate: BigDecimal = this.rate(donutCount)
+  def donutRate: BigDecimal = 69
 
   private def rate(count: Long): BigDecimal = Option(totalKills)
     .filter(tk => tk > 0)
@@ -38,7 +42,8 @@ case class User(userId: String,
 
   def increaseBoomerStamps: User = User(userId, serverId, lastRoll, scCount, donutCount, scrollCount, boomerStampCount + 1, id)
   def increaseSC: User = User(userId, serverId, lastRoll = LocalDate.now(), scCount + 1, donutCount, scrollCount, boomerStampCount, id)
-  def donutPenalty: User = User(userId, serverId, lastRoll = LocalDate.now(), scCount - 3, donutCount + 1, scrollCount, boomerStampCount, id)
+//  def donutPenalty: User = User(userId, serverId, lastRoll = LocalDate.now(), scCount - 3, donutCount + 1, scrollCount, boomerStampCount, id)
+  def donutPenalty: User = User(userId, serverId, lastRoll = LocalDate.now(), 0, donutCount + 1, scrollCount, boomerStampCount, id)
   def increaseScroll: User = User(userId, serverId, lastRoll = LocalDate.now(), scCount, donutCount, scrollCount + 1, boomerStampCount, id)
 
 }

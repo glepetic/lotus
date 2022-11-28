@@ -32,7 +32,7 @@ class StatsService {
 
   def fightLilynouch(userId: String, serverId: String, ignoreCooldown: Boolean = false): Future[DropType] = {
     this.findUser(userId, serverId)
-      .filter(usr => ignoreCooldown || usr.canDoLilynouch)
+//      .filter(usr => ignoreCooldown || usr.canDoLilynouch)
       .map(user => {
         val afterLily = this.fightLilynouch(user)
         this.save(afterLily.scUser)
